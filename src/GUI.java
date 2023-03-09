@@ -19,7 +19,7 @@ public class GUI extends JFrame {
         JPanel panelDown = new JPanel();
         add(BorderLayout.SOUTH, panelDown);
 
-        JLabel text = new JLabel("hejo");
+        JLabel text = new JLabel("bajo");
         panelDown.add(text);
 
 
