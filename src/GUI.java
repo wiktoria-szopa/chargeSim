@@ -1,67 +1,100 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
+import java.awt.event.*;
+import java.awt.*;
 import javax.swing.*;
 
 public class GUI extends JFrame {
+    //panele
+    JPanel panelCenter = new JPanel();
+    JPanel panelDown = new JPanel();
+
+    //label w ktory wrzucimy wspolrzedne itp
+    JLabel text = new JLabel("bajo");
+
+    //menubar
+    JMenuBar menuBar = new JMenuBar();
+
+    //menu glowne
+    JMenu menu = new JMenu("Menu");
+
+    //przyciski w menu glownym
+    JMenuItem saveItem = new JMenuItem("Save");
+    JMenuItem openItem = new JMenuItem("Open");
+    JMenuItem newItem = new JMenuItem("New");
+
+    //menu dodaj
+    JMenu menuAdd = new JMenu("Add");
+
+    //przyciski w menu dodaj
+    JMenuItem chargeItem = new JMenuItem("Charge");
+
+    //menu language
+    JMenu menuLanguage = new JMenu("Language");
+
+    //przyciski w menu language
+    JMenuItem polishItem = new JMenuItem("Polish");
+    JMenuItem englishItem = new JMenuItem("English");
+
+    //menu color
+    JMenu menuColor = new JMenu("Colors");
+
+    //przyciski menu color
+    JMenuItem backgroundColorItem = new JMenuItem("Background");
+
+    AddCharge addChargePanel = new AddCharge();
 
     public GUI() {
         this.setSize(640, 480);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+        this.add(addChargePanel);
 
-        JPanel panelCenter = new JPanel();
+
+
         add(BorderLayout.CENTER, panelCenter);
         panelCenter.setBackground(Color.GREEN);
 
-        JPanel panelDown = new JPanel();
+
         add(BorderLayout.SOUTH, panelDown);
 
-        JLabel text = new JLabel("bajo");
+
         panelDown.add(text);
 
 
-        JMenuBar menuBar = new JMenuBar();
-
-        JMenu menu = new JMenu("Menu");
         menuBar.add(menu);
 
-        JMenuItem saveItem = new JMenuItem("Save");
+
         menu.add(saveItem);
-
-        JMenuItem openItem = new JMenuItem("Open");
         menu.add(openItem);
-
-        JMenuItem newItem = new JMenuItem("New");
         menu.add(newItem);
 
-        JMenu menuAdd = new JMenu("Add");
-        menuBar.add(menuAdd);
 
-        JMenuItem chargeItem = new JMenuItem("Charge");
+        menuBar.add(menuAdd);
         menuAdd.add(chargeItem);
 
-        JMenu menuLanguage = new JMenu("Language");
+        /*chargeItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                public void paint(Graphics g) {
+                    Graphics2D g2d = (Graphics2D) g;
+                    g2d.drawOval(150, 150, 100, 100);
 
-        JMenuItem polishItem = new JMenuItem("Polish");
+                }
+            }
+        });*/
+
+
         menuLanguage.add(polishItem);
-
-        JMenuItem englishItem = new JMenuItem("English");
         menuLanguage.add(englishItem);
 
         menuBar.add(menuLanguage);
 
-        JMenu menuColor = new JMenu("Colors");
+
         menuBar.add(menuColor);
 
-        JMenuItem backgroundColorItem = new JMenuItem("Background");
+
         backgroundColorItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JColorChooser backgroundColorChooser = new JColorChooser();
-
                 Color backgorundColor = JColorChooser.showDialog(null, "Pick a background color", Color.BLACK);
                 panelCenter.setBackground(backgorundColor);
             }
@@ -71,6 +104,8 @@ public class GUI extends JFrame {
         this.setJMenuBar(menuBar);
 
     }
+
+
 
     public static void main(String[] args) {
         GUI start = new GUI();
