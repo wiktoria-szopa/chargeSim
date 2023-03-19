@@ -9,7 +9,6 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     //panele
     CenterPanel panelCenter = new CenterPanel();
     BottomPanel panelDown = new BottomPanel();
-
     Menu menuBar = new Menu();
 
     public GUI() {
@@ -24,13 +23,11 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
         setJMenuBar(menuBar);
         menuBar.listener = this;
         panelCenter.listener = this;
-
     }
 
     //region menu listener
     @Override
     public void backgroundColorChosen(Color color) {
-        System.out.println("GUI backgroundColorChosen");
         panelCenter.setBackground(color);
     }
     //endregion menu listner
@@ -40,6 +37,11 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     public void cursorMoved(int x, int y) {
         panelDown.renderXcord(x);
         panelDown.renderYcord(y);
+    }
+
+    @Override
+    public void potentialChange(double v) {
+        panelDown.renderPotential(v);
     }
     //endregion centerpanel listener
 }

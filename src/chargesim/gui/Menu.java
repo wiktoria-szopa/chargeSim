@@ -47,11 +47,9 @@ public class Menu extends JMenuBar {
         super();
         add(menu);
 
-
         menu.add(saveItem);
         menu.add(openItem);
         menu.add(newItem);
-
 
         add(menuAdd);
         menuAdd.add(chargeItem);
@@ -60,14 +58,11 @@ public class Menu extends JMenuBar {
 
         add(menuLanguage);
 
-
         add(menuColor);
-
 
         backgroundColorItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Menu actionPerformed");
                 Color backgorundColor = JColorChooser.showDialog(null, "Pick a background color", Color.BLACK);
                 listener.backgroundColorChosen(backgorundColor);
             }

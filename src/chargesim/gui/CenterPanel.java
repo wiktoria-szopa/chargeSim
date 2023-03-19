@@ -8,40 +8,31 @@ import java.awt.*;
 
 public class CenterPanel extends JPanel implements MouseListener, MouseMotionListener {
 
-    public interface Listener{
+    public interface Listener {
         void cursorMoved(int x, int y);
-    }
 
-    int chargeCounter = 0;
+        void potentialChange(double v);
+    }
 
     Listener listener;
 
-    Charge ladunek = new Charge();
-    public CenterPanel(){
+    public CenterPanel() {
         super();
         setBackground(Color.PINK);
+        addMouseListener(this);
+        addMouseMotionListener(this);
     }
 
-    /*public void countPotential(int rx, int ry) {
-        v = 1000*(1/Math.sqrt(rx*rx + ry*ry));
-    }*/
+    public double calculatePotential(int x, int y) {
+        return 1000 * (1 / Math.sqrt(x * x + y * y));
+    }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        listener.cursorMoved(x,y);
-
-        /*if(chargeCounter == 0) {
-            v = 0;
-        }
-        else {
-            int rX = ladunek.x - e.getX();
-            int rY = ladunek.y - e.getY();
-            this.countPotential(rX, rY);
-        }
-        bottomPanel.potential.setText(String.format("%.2f",v));*/
-
+        listener.cursorMoved(x, y);
+        listener.potentialChange(calculatePotential(x, y));
     }
 
     @Override
