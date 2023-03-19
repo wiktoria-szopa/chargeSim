@@ -4,31 +4,36 @@ import javax.swing.*;
 
 public class BottomPanel extends JPanel {
 
-    JLabel xcord;
-    JLabel ycord;
-    JLabel potential;
+    JLabel xcord = new JLabel();
+    JLabel ycord = new JLabel();
+    JLabel potential = new JLabel();
 
     JLabel xField = new JLabel("X: ");
     JLabel yField = new JLabel(" Y: ");
-    JLabel vField = new JLabel("V: ");
+    JLabel potentialField = new JLabel("V: ");
 
 
-    public BottomPanel(CenterPanel centerPanel) {
+    public BottomPanel() {
         super();
-
-        xcord = new JLabel(Integer.toString(centerPanel.x));
-        ycord = new JLabel(Integer.toString(centerPanel.y));
-        potential = new JLabel(Double.toString(centerPanel.v));
-
-
         add(xField);
         add(xcord);
         add(yField);
         add(ycord);
-        add(vField);
+        add(potentialField);
         add(potential);
 
+    }
 
+    public void renderXcord(int x){
+        xcord.setText(Integer.toString(x));
+    }
+
+    public void renderYcord(int y){
+        ycord.setText(Integer.toString(y));
+    }
+
+    public void renderPotential(double v){
+        potential.setText(String.format("%.2f",v));
     }
 
 }

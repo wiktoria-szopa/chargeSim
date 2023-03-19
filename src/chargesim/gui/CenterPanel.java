@@ -8,28 +8,31 @@ import java.awt.*;
 
 public class CenterPanel extends JPanel implements MouseListener, MouseMotionListener {
 
+    public interface Listener{
+        void cursorMoved(int x, int y);
+    }
+
     int chargeCounter = 0;
 
+    Listener listener;
+
     Charge ladunek = new Charge();
-    public double v = 0;
-    public int x = 0;
-    public int y = 0;
     public CenterPanel(){
         super();
         setBackground(Color.PINK);
     }
 
-    public void countPotential(int rx, int ry) {
+    /*public void countPotential(int rx, int ry) {
         v = 1000*(1/Math.sqrt(rx*rx + ry*ry));
-    }
+    }*/
 
-    public void mouseMoved(MouseEvent e, BottomPanel bottomPanel) {
-        x = e.getX();
-        y = e.getY();
-        bottomPanel.xcord.setText(Integer.toString(x));
-        bottomPanel.ycord.setText(Integer.toString(y));
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+        listener.cursorMoved(x,y);
 
-        if(chargeCounter == 0) {
+        /*if(chargeCounter == 0) {
             v = 0;
         }
         else {
@@ -37,7 +40,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
             int rY = ladunek.y - e.getY();
             this.countPotential(rX, rY);
         }
-        bottomPanel.potential.setText(String.format("%.2f",v));
+        bottomPanel.potential.setText(String.format("%.2f",v));*/
 
     }
 
@@ -68,11 +71,6 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
 
     }
 
