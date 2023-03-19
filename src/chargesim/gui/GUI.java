@@ -5,11 +5,10 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 
-public class GUI extends JFrame implements Menu.Listener {
+public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     //panele
     CenterPanel panelCenter = new CenterPanel();
     BottomPanel panelDown = new BottomPanel();
-
     Menu menuBar = new Menu();
 
     public GUI() {
@@ -23,39 +22,31 @@ public class GUI extends JFrame implements Menu.Listener {
 
         setJMenuBar(menuBar);
         menuBar.listener = this;
-
-
-
-        /*chargeItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                public void paint(Graphics g) {
-                    Graphics2D g2d = (Graphics2D) g;
-                    g2d.drawOval(150, 150, 100, 100);
-
-                }
-            }
-        });*/
-
-
-
-
-
-
+        panelCenter.listener = this;
     }
 
+    //region menu listener
     @Override
     public void backgroundColorChosen(Color color) {
-        System.out.println("GUI backgroundColorChosen");
         panelCenter.setBackground(color);
     }
 
-    /*public void plotCharges() {
-        for (Charge charge : charges) {
-            panelCenter.paintComponents(Graphics g);
+    @Override
+    public void addChargeClicked() {
+        panelCenter.addCharge();
+    }
+    //endregion menu listner
 
-        }
-    }*/
+    //region centerpanel listener
+    @Override
+    public void cursorMoved(int x, int y) {
+        panelDown.renderXcord(x);
+        panelDown.renderYcord(y);
+    }
 
-
+    @Override
+    public void potentialChange(double v) {
+        panelDown.renderPotential(v);
+    }
+    //endregion centerpanel listener
 }
