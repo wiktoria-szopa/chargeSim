@@ -24,24 +24,6 @@ public class GUI extends JFrame implements Menu.Listener {
         setJMenuBar(menuBar);
         menuBar.listener = this;
 
-
-
-        /*chargeItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                public void paint(Graphics g) {
-                    Graphics2D g2d = (Graphics2D) g;
-                    g2d.drawOval(150, 150, 100, 100);
-
-                }
-            }
-        });*/
-
-
-
-
-
-
     }
 
     @Override
@@ -49,13 +31,6 @@ public class GUI extends JFrame implements Menu.Listener {
         System.out.println("GUI backgroundColorChosen");
         panelCenter.setBackground(color);
     }
-
-    /*public void plotCharges() {
-        for (Charge charge : charges) {
-            panelCenter.paintComponents(Graphics g);
-
-        }
-    }*/
 
 
 }
