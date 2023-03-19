@@ -30,6 +30,11 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     public void backgroundColorChosen(Color color) {
         panelCenter.setBackground(color);
     }
+
+    @Override
+    public void addChargeClicked() {
+        panelCenter.addCharge();
+    }
     //endregion menu listner
 
     //region centerpanel listener

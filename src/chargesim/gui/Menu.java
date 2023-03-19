@@ -9,6 +9,7 @@ public class Menu extends JMenuBar {
 
     public interface Listener {
         void backgroundColorChosen(Color color);
+        void addChargeClicked();
     }
 
     //region fields
@@ -65,6 +66,13 @@ public class Menu extends JMenuBar {
             public void actionPerformed(ActionEvent e) {
                 Color backgorundColor = JColorChooser.showDialog(null, "Pick a background color", Color.BLACK);
                 listener.backgroundColorChosen(backgorundColor);
+            }
+        });
+
+        chargeItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listener.addChargeClicked();
             }
         });
 

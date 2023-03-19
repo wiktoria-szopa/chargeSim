@@ -5,6 +5,7 @@ import chargesim.Charge;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class CenterPanel extends JPanel implements MouseListener, MouseMotionListener {
 
@@ -15,6 +16,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     }
 
     Listener listener;
+    private java.util.List<Charge> charges = new ArrayList<Charge>();
 
     public CenterPanel() {
         super();
@@ -23,10 +25,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         addMouseMotionListener(this);
     }
 
-    public double calculatePotential(int x, int y) {
-        return 1000 * (1 / Math.sqrt(x * x + y * y));
-    }
-
+    //region mouse listeners
     @Override
     public void mouseMoved(MouseEvent e) {
         int x = e.getX();
@@ -63,6 +62,17 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     @Override
     public void mouseDragged(MouseEvent e) {
 
+    }
+    //endregion mouse listeners
+
+    public void addCharge(){
+        Charge charge = new Charge(this.getWidth() / 2, this.getHeight() / 2, 1);
+        charges.add(charge);
+        this.getGraphics().drawImage(charge.positive.getImage(), charge.x-20, charge.y-20, 40, 40, null);
+    }
+
+    private double calculatePotential(int x, int y) {
+        return 1000 * (1 / Math.sqrt(x * x + y * y));
     }
 
 }
