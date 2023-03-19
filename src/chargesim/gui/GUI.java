@@ -8,7 +8,7 @@ import javax.swing.*;
 public class GUI extends JFrame implements Menu.Listener {
     //panele
     CenterPanel panelCenter = new CenterPanel();
-    BottomPanel panelDown = new BottomPanel();
+    BottomPanel panelDown = new BottomPanel(panelCenter);
 
     Menu menuBar = new Menu();
 
