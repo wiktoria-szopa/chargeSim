@@ -40,6 +40,10 @@ public class Menu extends JMenuBar {
     //przyciski menu color
     JMenuItem backgroundColorItem = new JMenuItem("Background");
 
+    JMenuItem equipotentialColorItem = new JMenuItem("Equipotential  lines");
+
+    JMenuItem fieldForceColorItem = new JMenuItem("Field force lines");
+
     //endregion fields
 
     public Menu.Listener listener;
@@ -77,5 +81,7 @@ public class Menu extends JMenuBar {
         });
 
         menuColor.add(backgroundColorItem);
+        menuColor.add(equipotentialColorItem);
+        menuColor.add(fieldForceColorItem);
     }
 }

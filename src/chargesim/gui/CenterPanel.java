@@ -7,6 +7,8 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+
 public class CenterPanel extends JPanel implements MouseListener, MouseMotionListener {
 
     private static final int CHARGE_RADIUS = 20;
@@ -110,6 +112,36 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         chargeMenu.add(editItem);
 
         chargeMenu.show(this, x, y);
+
+        JFrame editMenuFrame = new JFrame();
+        editMenuFrame.setSize(250, 100);
+        editMenuFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+
+        JPanel editMenuPanel = new JPanel();
+        editMenuPanel.setLayout(new GridLayout(2,2));
+
+        editMenuFrame.add(editMenuPanel);
+
+        JTextField chargeValueInput = new JTextField();
+        chargeValueInput.setText("1");
+        JLabel chargeValueLabel = new JLabel("Set charge value:");
+
+        JButton okButton = new JButton("OK");
+        JButton cancelButton = new JButton("Cancel");
+
+        editMenuPanel.add(chargeValueLabel);
+        editMenuPanel.add(chargeValueInput);
+        editMenuPanel.add(okButton);
+        editMenuPanel.add(cancelButton);
+
+        editItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editMenuFrame.setVisible(true);
+
+            }
+        });
 
     }
 
