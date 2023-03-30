@@ -12,6 +12,8 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 public class CenterPanel extends JPanel implements MouseListener, MouseMotionListener {
 
     private static final int CHARGE_RADIUS = 20;
+    int x;
+    int y;
 
     public interface Listener {
         void cursorMoved(int x, int y);
@@ -32,8 +34,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     //region mouse listeners
     @Override
     public void mouseMoved(MouseEvent e) {
-        int x = e.getX();
-        int y = e.getY();
+        x = e.getX();
+        y = e.getY();
         listener.cursorMoved(x, y);
         listener.potentialChange(calculatePotential(x, y));
     }
@@ -45,8 +47,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 
     @Override
     public void mousePressed(MouseEvent e) {
-        int x = e.getX();
-        int y = e.getY();
+        x = e.getX();
+        y = e.getY();
         if (SwingUtilities.isRightMouseButton(e)) {
             for (Charge charge : charges) {
                 if (calculateDistance(x, y, charge.x, charge.y) < CHARGE_RADIUS) {
