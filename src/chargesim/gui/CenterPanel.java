@@ -2,8 +2,12 @@ package chargesim.gui;
 
 import chargesim.Charge;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -14,7 +18,10 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     private static final int CHARGE_RADIUS = 20;
     int x;
     int y;
-
+    
+    private BufferedImage positiveImage;
+    private BufferedImage negativeImage;
+    
     public interface Listener {
         void cursorMoved(int x, int y);
 
@@ -29,9 +36,50 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         setBackground(Color.WHITE);
         addMouseListener(this);
         addMouseMotionListener(this);
-    }
+        URL resource1 = getClass().getResource("/chargesim/dodatni.png");
+        URL resource2 = getClass().getResource("/chargesim/ujemny.png");
+        try {
+        	positiveImage = ImageIO.read(resource1);
+        	negativeImage = ImageIO.read(resource2);
+        } catch (IOException e) {
+        	System.err.println("Blad odczytu obrazka");
+        	e.printStackTrace();
+        }
 
-    //region mouse listeners
+    }
+    
+    
+
+    @Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+	
+		Graphics2D g2d = (Graphics2D) g;
+		for (Charge charge : charges) {
+			if(charge.value < 0) {
+				g2d.drawImage(
+						negativeImage, 
+						charge.x-CHARGE_RADIUS, 
+						charge.y-CHARGE_RADIUS, 
+						2*CHARGE_RADIUS, 
+						2*CHARGE_RADIUS, 
+						this);
+			}
+			else {
+				g2d.drawImage(
+						positiveImage, 
+						charge.x-CHARGE_RADIUS, 
+						charge.y-CHARGE_RADIUS, 
+						2*CHARGE_RADIUS, 
+						2*CHARGE_RADIUS, 
+						this);
+			}
+		}
+	}
+
+
+
+	//region mouse listeners
     @Override
     public void mouseMoved(MouseEvent e) {
         x = e.getX();
@@ -55,9 +103,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
                     showChargeMenu(x,y);
                 }
             }
-
         }
-
     }
 
     @Override
@@ -84,15 +130,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     public void addCharge() {
         Charge charge = new Charge(this.getWidth() / 2, this.getHeight() / 2, 1);
         charges.add(charge);
-        this.getGraphics()
-                .drawImage(
-                        charge.positive.getImage(),
-                        charge.x - CHARGE_RADIUS,
-                        charge.y - CHARGE_RADIUS,
-                        2 * CHARGE_RADIUS,
-                        2 * CHARGE_RADIUS,
-                        null
-                );
+        repaint();
     }
 
     private double calculatePotential(int x, int y) {
