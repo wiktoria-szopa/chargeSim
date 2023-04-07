@@ -12,7 +12,7 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     Menu menuBar = new Menu();
 
     public GUI() {
-        this.setSize(640, 480);
+        this.setSize(800, 800);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
