@@ -21,19 +21,18 @@ public class BottomPanel extends JPanel {
         add(ycord);
         add(potentialField);
         add(potential);
-
     }
 
-    public void renderXcord(int x){
-        xcord.setText(Integer.toString(x));
+    public void renderXcord(double x){
+        xcord.setText(String.format("%.2f",x)+" m");
     }
 
-    public void renderYcord(int y){
-        ycord.setText(Integer.toString(y));
+    public void renderYcord(double y){
+        ycord.setText(String.format("%.2f",y)+" m");
     }
 
     public void renderPotential(double v){
-        potential.setText(String.format("%.2f",v));
+        potential.setText(String.format("%.2f",v)+" V");
     }
 
 }

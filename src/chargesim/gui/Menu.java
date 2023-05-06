@@ -7,9 +7,11 @@ import java.awt.event.ActionListener;
 
 public class Menu extends JMenuBar {
 
-    public interface Listener {
+    public interface Listener {   
         void backgroundColorChosen(Color color);
+        void equipotentialColorChosen(Color color);
         void addChargeClicked();
+        void newItemChosen();
     }
 
     //region fields
@@ -73,12 +75,30 @@ public class Menu extends JMenuBar {
             }
         });
 
+        equipotentialColorItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Color isolineColor = JColorChooser.showDialog(null, "Pick a isoline color", Color.BLACK);
+                listener.equipotentialColorChosen(isolineColor);
+			}
+		});
+        
         chargeItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 listener.addChargeClicked();
             }
         });
+        
+        newItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				listener.newItemChosen();
+				
+			}
+		});
 
         menuColor.add(backgroundColorItem);
         menuColor.add(equipotentialColorItem);
