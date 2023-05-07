@@ -20,7 +20,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     private static final double eQ = 1.6*Math.pow(10, (-19));
     private double x;
     private double y;
-    private double[][] potentialTab = new double[800][800];
+    private double[][] potentialTab = new double[805][805];
     
     private BufferedImage positiveImage;
     private BufferedImage negativeImage;
@@ -58,15 +58,17 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
-				
+		
 		g2d.setColor(equipotentialColor);
 		if(charges.size() != 0) {
 			int A = charges.size();
 			double B = calculateAbsCharge();
-			for(double step = 0.0; step<=30*calculateAbsCharge(); step += 0.5 + step*0.25) {
+			double C = 0.05;
+			for(double step = 0.0; step<=30*B; step += 0.5 + step*0.25) {
 				for(int i =0; i< this.getWidth(); i++) {
 					for(int j =0; j< this.getHeight(); j++) {
-						if(Math.abs(potentialTab[i][j])<=step && Math.abs(potentialTab[i][j])>= step -0.05*A-step*0.005*A*Math.pow(Math.abs(potentialTab[i][j]), 1.2)/(1+4*B) ) {
+						C = Math.sqrt( Math.abs(potentialTab[i+5][j+5] - potentialTab[i][j]));
+						if(potentialTab[i][j]<=step && potentialTab[i][j]>= step -0.12*C*A-step*0.005*A*Math.pow(potentialTab[i][j], 1.2)/(1+8*B) ) {
 							g2d.drawOval(i-1, j-1, 1, 1);
 						}									
 					}
@@ -170,15 +172,16 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     }
     
+    //tablica wartosc bezwglendych potencjalu w danych punktach
     public void calculatePotTab() {
     	if(charges.size() != 0) {
-    		for(int i =0; i< this.getWidth(); i++) {
-    			for(int j =0; j< this.getHeight(); j++) {
+    		for(int i =0; i< this.getWidth()+5; i++) {
+    			for(int j =0; j< this.getHeight()+5; j++) {
     				double ii = i;
     				double jj = j;
     				ii = ii/100;
     				jj = jj/100;
-    				potentialTab[i][j] = calculatePotential(ii, jj);
+    				potentialTab[i][j] = Math.abs(calculatePotential(ii, jj));
     			}									
     		}
     	}   	
@@ -186,13 +189,13 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     //endregio PotentialCalculation
     
     public void addCharge() {
-        Charge charge = new Charge(this.getWidth() / 4, this.getHeight() / 2, 1);
+        Charge charge = new Charge(this.getWidth() / 4, this.getHeight() / 4, 1);
         charges.add(charge);
-        Charge charge2 = new Charge(this.getWidth()*3 / 4, this.getHeight() / 2, -1);
+        Charge charge2 = new Charge(this.getWidth()*3 / 4, this.getHeight() / 4, -1);
         charges.add(charge2);
-        Charge charge3 = new Charge(this.getWidth() / 4, this.getHeight()*3 / 4, 1);
+        Charge charge3 = new Charge(this.getWidth() / 4, this.getHeight()*3 / 4, -10);
         charges.add(charge3);
-        Charge charge4 = new Charge(this.getWidth()*3 / 4, this.getHeight()*3 / 4, 1);
+        Charge charge4 = new Charge(this.getWidth()*3 / 4, this.getHeight()*3 / 4, 10);
         charges.add(charge4);
         calculatePotTab();
         repaint();
@@ -265,9 +268,5 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 		this.repaint();
 	}
 	//enndregion get/set
-
-    
-    
-    
     
 }

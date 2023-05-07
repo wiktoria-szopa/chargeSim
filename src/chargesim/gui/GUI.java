@@ -58,5 +58,5 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
         panelDown.renderPotential(v);
     }
     //endregion centerpanel listener
-    
+
 }
