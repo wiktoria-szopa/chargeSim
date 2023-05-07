@@ -20,6 +20,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     private static final double eQ = 1.6*Math.pow(10, (-19));
     private double x;
     private double y;
+    private double[][] potentialTab = new double[800][800];
     
     private BufferedImage positiveImage;
     private BufferedImage negativeImage;
@@ -61,6 +62,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 		
+		/*
 		g2d.setColor(equipotentialColor);
 		if(charges.size() != 0) {
 			for(double step = 0.0; step<=30*calculateAbsCharge(); step += 0.5 + step*0.25) {
@@ -77,7 +79,23 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 				}
 			} 
 		}
+		g2d.setColor(Color.black); */
 		
+		g2d.setColor(equipotentialColor);
+		if(charges.size() != 0) {
+			int A = charges.size();
+			double B = calculateAbsCharge();
+			for(double step = 0.0; step<=30*calculateAbsCharge(); step += 0.5 + step*0.25) {
+				for(int i =0; i< this.getWidth(); i++) {
+					for(int j =0; j< this.getHeight(); j++) {
+						if(Math.abs(potentialTab[i][j])<=step && Math.abs(potentialTab[i][j])>= step -0.05*A-step*0.005*A*Math.pow(Math.abs(potentialTab[i][j]), 1.2)/(1+4*B) ) {
+							g2d.drawOval(i-1, j-1, 1, 1);
+						}									
+					}
+				}
+			} 
+		}
+		g2d.setColor(Color.black);
 		
 		
 		
@@ -111,12 +129,28 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         charges.add(charge);
         Charge charge2 = new Charge(this.getWidth()*3 / 4, this.getHeight() / 2, -1);
         charges.add(charge2);
-        //Charge charge3 = new Charge(this.getWidth() / 4, this.getHeight()*3 / 4, 5);
-        //charges.add(charge3);
-        //Charge charge4 = new Charge(this.getWidth()*3 / 4, this.getHeight()*3 / 4, 5);
-        //charges.add(charge4);
+        Charge charge3 = new Charge(this.getWidth() / 4, this.getHeight()*3 / 4, 5);
+        charges.add(charge3);
+        Charge charge4 = new Charge(this.getWidth()*3 / 4, this.getHeight()*3 / 4, 5);
+        charges.add(charge4);
+        calculatePotTab();
         repaint();
     }
+    
+    public void calculatePotTab() {
+    	if(charges.size() != 0) {
+    		for(int i =0; i< this.getWidth(); i++) {
+    			for(int j =0; j< this.getHeight(); j++) {
+    				double ii = i;
+    				double jj = j;
+    				ii = ii/100;
+    				jj = jj/100;
+    				potentialTab[i][j] = calculatePotential(ii, jj);
+    			}									
+    		}
+    	}   	
+	}
+
 
 	//region mouse listeners
     @Override
