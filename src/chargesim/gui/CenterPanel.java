@@ -35,6 +35,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     }
 
     Listener listener;
+    
     private java.util.List<Charge> charges = new ArrayList<Charge>();
 
     public CenterPanel() {
@@ -53,34 +54,11 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         }
     }
     
-    private java.util.List<Integer> xArray = new ArrayList<Integer>();
-    private java.util.List<Integer> yArray = new ArrayList<Integer>();
-    int n = 0;
-
     @Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
-		
-		/*
-		g2d.setColor(equipotentialColor);
-		if(charges.size() != 0) {
-			for(double step = 0.0; step<=30*calculateAbsCharge(); step += 0.5 + step*0.25) {
-				for(int i =0; i<= this.getWidth(); i++) {
-					for(int j =0; j<= this.getHeight(); j++) {
-						double ii = i;
-						double jj = j;
-						ii = ii/100;
-						jj = jj/100;
-						if(Math.abs(calculatePotential(ii, jj))<=step && Math.abs(calculatePotential(ii, jj))>= step -0.05*charges.size()-step*0.005*charges.size()*Math.pow(Math.abs(calculatePotential(ii, jj)), 1.2)/(1+4*calculateAbsCharge())    ) {
-							g2d.drawOval(i-1, j-1, 1, 1);
-						}									
-					}
-				}
-			} 
-		}
-		g2d.setColor(Color.black); */
-		
+				
 		g2d.setColor(equipotentialColor);
 		if(charges.size() != 0) {
 			int A = charges.size();
@@ -118,39 +96,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 						2*CHARGE_RADIUS, 
 						this);
 			}
-		}
-
-				
-		
+		}					
 	}
-
-    public void addCharge() {
-        Charge charge = new Charge(this.getWidth() / 4, this.getHeight() / 2, 1);
-        charges.add(charge);
-        Charge charge2 = new Charge(this.getWidth()*3 / 4, this.getHeight() / 2, -1);
-        charges.add(charge2);
-        Charge charge3 = new Charge(this.getWidth() / 4, this.getHeight()*3 / 4, 5);
-        charges.add(charge3);
-        Charge charge4 = new Charge(this.getWidth()*3 / 4, this.getHeight()*3 / 4, 5);
-        charges.add(charge4);
-        calculatePotTab();
-        repaint();
-    }
-    
-    public void calculatePotTab() {
-    	if(charges.size() != 0) {
-    		for(int i =0; i< this.getWidth(); i++) {
-    			for(int j =0; j< this.getHeight(); j++) {
-    				double ii = i;
-    				double jj = j;
-    				ii = ii/100;
-    				jj = jj/100;
-    				potentialTab[i][j] = calculatePotential(ii, jj);
-    			}									
-    		}
-    	}   	
-	}
-
 
 	//region mouse listeners
     @Override
@@ -200,10 +147,9 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     public void mouseDragged(MouseEvent e) {
 
     }
-    //endregion mouse listeners
-
+    //endregion mouse listeners    
     
-    
+    //region PotentialCalculation
     public double calculateAbsCharge() {
     	double tmpCharge = 0;
     	for (Charge charge : charges) {
@@ -224,8 +170,34 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     }
     
+    public void calculatePotTab() {
+    	if(charges.size() != 0) {
+    		for(int i =0; i< this.getWidth(); i++) {
+    			for(int j =0; j< this.getHeight(); j++) {
+    				double ii = i;
+    				double jj = j;
+    				ii = ii/100;
+    				jj = jj/100;
+    				potentialTab[i][j] = calculatePotential(ii, jj);
+    			}									
+    		}
+    	}   	
+	}
+    //endregio PotentialCalculation
     
-
+    public void addCharge() {
+        Charge charge = new Charge(this.getWidth() / 4, this.getHeight() / 2, 1);
+        charges.add(charge);
+        Charge charge2 = new Charge(this.getWidth()*3 / 4, this.getHeight() / 2, -1);
+        charges.add(charge2);
+        Charge charge3 = new Charge(this.getWidth() / 4, this.getHeight()*3 / 4, 1);
+        charges.add(charge3);
+        Charge charge4 = new Charge(this.getWidth()*3 / 4, this.getHeight()*3 / 4, 1);
+        charges.add(charge4);
+        calculatePotTab();
+        repaint();
+    }    
+    
     private void showChargeMenu(double x, double y){
         JPopupMenu chargeMenu = new JPopupMenu();
         JMenuItem editItem = new JMenuItem("Edit");
@@ -293,6 +265,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 		this.repaint();
 	}
 	//enndregion get/set
+
     
     
     

@@ -2,6 +2,8 @@ package chargesim.gui;
 
 
 import java.awt.event.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.awt.*;
 import javax.swing.*;
 
@@ -56,4 +58,5 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
         panelDown.renderPotential(v);
     }
     //endregion centerpanel listener
+    
 }
