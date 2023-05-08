@@ -17,7 +17,7 @@ public class Main {
 
 			public void run() {
 				GUI start = new GUI();
-		        start.setVisible(true);		
+		        start.setVisible(true);
 
 			}
 		});        
