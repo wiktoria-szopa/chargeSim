@@ -13,31 +13,31 @@ public class Charge {
         this.value = value;
     }
 
-    //start get/set region
-	public double getValue() {
-		return value;
-	}
+    //region get/set
+    public double getValue() {
+        return value;
+    }
 
-	public void setValue(double value) {
-		this.value = value;
-	}
+    public void setValue(double value) {
+        this.value = value;
+    }
 
-	public double getX() {
-		return x;
-	}
+    public double getX() {
+        return x;
+    }
 
-	public void setX(double x) {
-		this.x = x;
-	}
+    public void setX(double x) {
+        this.x = x;
+    }
 
-	public double getY() {
-		return y;
-	}
+    public double getY() {
+        return y;
+    }
 
-	public void setY(double y) {
-		this.y = y;
-	}
-	//end get/set region
+    public void setY(double y) {
+        this.y = y;
+    }
+    //endregion get/set
 
 }
 
