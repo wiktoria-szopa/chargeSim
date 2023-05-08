@@ -4,6 +4,8 @@ import chargesim.Charge;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -228,6 +230,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     }
 
     private void showChargeMenu(double x, double y, Charge charge) {
+        double initialChargeValue = charge.getValue();
         JPopupMenu chargeMenu = new JPopupMenu();
         JMenuItem editItem = new JMenuItem("Edit");
         JMenuItem copyItem = new JMenuItem("Copy");
@@ -240,21 +243,49 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         chargeMenu.show(this, (int) x, (int) y);
 
         JFrame editMenuFrame = new JFrame();
-        editMenuFrame.setSize(250, 100);
-        editMenuFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+        editMenuFrame.setSize(450, 150);
 
         JPanel editMenuPanel = new JPanel();
         editMenuPanel.setLayout(new GridLayout(2, 2));
 
         editMenuFrame.add(editMenuPanel);
 
-        JTextField chargeValueInput = new JTextField();
-        chargeValueInput.setText("1");
+        final int SLIDER_MIN = -10;
+        final int SLIDER_MAX = 10;
+        final int SLIDER_INIT = 1;
+        JSlider chargeValueInput = new JSlider(JSlider.HORIZONTAL, SLIDER_MIN, SLIDER_MAX, SLIDER_INIT);
+        chargeValueInput.setMajorTickSpacing(2);
+        chargeValueInput.setPaintLabels(true);
+        chargeValueInput.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                charge.setValue(chargeValueInput.getValue());
+                calculatePotTab();
+                repaint();
+
+            }
+        });
+
         JLabel chargeValueLabel = new JLabel("Set charge value:");
 
         JButton okButton = new JButton("OK");
+        okButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editMenuFrame.dispose();
+            }
+        });
         JButton cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                charge.setValue(initialChargeValue);
+                calculatePotTab();
+                repaint();
+                editMenuFrame.dispose();
+            }
+        });
+
 
         editMenuPanel.add(chargeValueLabel);
         editMenuPanel.add(chargeValueInput);
@@ -264,6 +295,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         editItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                editMenuFrame.setLocationRelativeTo(CenterPanel.this);
                 editMenuFrame.setVisible(true);
 
             }
