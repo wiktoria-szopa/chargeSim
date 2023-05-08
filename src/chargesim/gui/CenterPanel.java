@@ -129,6 +129,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 
     @Override
     public void mousePressed(MouseEvent e) {
+        if(!SwingUtilities.isLeftMouseButton(e))
+            return;
         int tmpX = e.getX();
         int tmpY = e.getY();
         boolean chargeFound = false;
