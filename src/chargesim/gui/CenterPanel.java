@@ -252,8 +252,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 
         final int SLIDER_MIN = -10;
         final int SLIDER_MAX = 10;
-        final int SLIDER_INIT = 1;
-        JSlider chargeValueInput = new JSlider(JSlider.HORIZONTAL, SLIDER_MIN, SLIDER_MAX, SLIDER_INIT);
+        JSlider chargeValueInput = new JSlider(JSlider.HORIZONTAL, SLIDER_MIN, SLIDER_MAX, (int) charge.getValue());
         chargeValueInput.setMajorTickSpacing(2);
         chargeValueInput.setPaintLabels(true);
         chargeValueInput.addChangeListener(new ChangeListener() {
