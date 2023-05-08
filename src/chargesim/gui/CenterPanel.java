@@ -119,7 +119,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         if (SwingUtilities.isRightMouseButton(e)) {
             for (Charge charge : charges) {
                 if (calculateDistance(tmpX, tmpY, charge.getX(), charge.getY()) < CHARGE_RADIUS) {
-                    showChargeMenu(tmpX, tmpY);
+                    showChargeMenu(tmpX, tmpY, charge);
                 }
             }
         }
@@ -129,7 +129,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if(!SwingUtilities.isLeftMouseButton(e))
+        if (!SwingUtilities.isLeftMouseButton(e))
             return;
         int tmpX = e.getX();
         int tmpY = e.getY();
@@ -141,7 +141,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
                 break;
             }
         }
-        if(!chargeFound){
+        if (!chargeFound) {
             movingCharge = null;
         }
     }
@@ -227,7 +227,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         repaint();
     }
 
-    private void showChargeMenu(double x, double y) {
+    private void showChargeMenu(double x, double y, Charge charge) {
         JPopupMenu chargeMenu = new JPopupMenu();
         JMenuItem editItem = new JMenuItem("Edit");
         JMenuItem copyItem = new JMenuItem("Copy");
@@ -266,6 +266,27 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
             public void actionPerformed(ActionEvent e) {
                 editMenuFrame.setVisible(true);
 
+            }
+        });
+
+        deleteItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                charges.remove(charge);
+                calculatePotTab();
+                repaint();
+
+            }
+        });
+
+        copyItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int newChargeX = CenterPanel.this.getWidth()/2;
+                int newChargeY = CenterPanel.this.getHeight()/2;
+                charges.add(new Charge(newChargeX, newChargeY, charge.getValue()));
+                calculatePotTab();
+                repaint();
             }
         });
 
