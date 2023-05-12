@@ -279,8 +279,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     //tablica wartosc bezwglendych potencjalu w danych punktach
     public void calculatePotTab() {
         if (charges.size() != 0) {
-            for (int i = 0; i < this.getWidth(); i++) {
-                for (int j = 0; j < this.getHeight(); j++) {
+            for (int i = 0; i < binTabWidth*rez; i++) {
+                for (int j = 0; j < binTabWidth*rez; j++) {
                     double ii = i;
                     double jj = j;
                     ii = ii / 100;
