@@ -24,7 +24,13 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     private double y;
     int nextChargeId = 1;
     Charge movingCharge = null;
+    
+    
+    int rez = 3;
+    int jump = 1;
+    int dJump = 2;
     private double[][] potentialTab = new double[805][805];
+    private int[][] binTab = new int[268][268];
 
     private BufferedImage positiveImage;
     private BufferedImage negativeImage;
@@ -62,7 +68,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-
+        /*
         g2d.setColor(equipotentialColor);
         if (charges.size() != 0) {
             int A = charges.size();
@@ -79,7 +85,71 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
                 }
             }
         }
+        g2d.setColor(Color.black); */
+        
+        g2d.setColor(equipotentialColor);
+        double B = calculateAbsCharge();
+        int state = 0;
+        g2d.setStroke( new BasicStroke(3));
+        for (double step = 0.0; step <= 30 * B; step += 0.5 + step * 0.25) {
+        	calcBinTab(step);
+            for (int i = 0; i < 267; i++) {
+                for (int j = 0; j < 267; j++) {
+                	 state = getState(binTab[i][j], binTab[i+1][j], binTab[i+1][j+1], binTab[i][j+1]);
+                	 switch (state) {
+                	 case 1:
+                		 g2d.drawLine(i*rez, j*rez+jump, i*rez+jump, j*rez+dJump);
+                		 break;
+                	 case 2:
+                		 g2d.drawLine(i*rez+jump, j*rez+dJump, i*rez+dJump, j*rez+jump);
+                		 break;
+                	 case 3:
+                		 g2d.drawLine(i*rez, j*rez+jump, i*rez+dJump, j*rez+jump);
+                		 break; 
+                	 case 4:
+                		 g2d.drawLine(i*rez+jump, j*rez, i*rez+dJump, j*rez+jump);
+                		 break; 
+                	 case 5:
+                		 g2d.drawLine(i*rez, j*rez+jump, i*rez+jump, j*rez);
+                		 g2d.drawLine(i*rez+jump, j*rez+dJump, i*rez+dJump, j*rez+jump);
+                		 break;
+                	 case 6:
+                		 g2d.drawLine(i*rez+jump, j*rez, i*rez+jump, j*rez+dJump);
+                		 break;
+                	 case 7:
+                		 g2d.drawLine(i*rez, j*rez+jump, i*rez+jump, j*rez);
+                		 break;
+                	 case 8:
+                		 g2d.drawLine(i*rez, j*rez+jump, i*rez+jump, j*rez);
+                		 break; 
+                	 case 9:
+                		 g2d.drawLine(i*rez+jump, j*rez, i*rez+jump, j*rez+dJump);
+                		 break; 
+                	 case 10:
+                		 g2d.drawLine(i*rez, j*rez+jump, i*rez+jump, j*rez+dJump);
+                		 g2d.drawLine(i*rez+jump, j*rez, i*rez+dJump, j*rez+jump);
+                		 break;
+                	 case 11:
+                		 g2d.drawLine(i*rez+jump, j*rez, i*rez+dJump, j*rez+jump);
+                		 break;
+                	 case 12:
+                		 g2d.drawLine(i*rez, j*rez+jump, i*rez+dJump, j*rez+jump);
+                		 break;
+                	 case 13:
+                		 g2d.drawLine(i*rez+jump, j*rez+dJump, i*rez+dJump, j*rez+jump);
+                		 break; 
+                	 case 14:
+                		 g2d.drawLine(i*rez, j*rez+jump, i*rez+jump, j*rez+dJump);
+                		 break; 
+                	 case 15:
+                		 break;
+                	 }
+                	 
+                }           
+            }                  
+        }
         g2d.setColor(Color.black);
+        
 
 
         for (Charge charge : charges) {
@@ -173,12 +243,34 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         int tmpY = e.getY();
         movingCharge.setX(tmpX);
         movingCharge.setY(tmpY);
-        calculatePotTab();
+        calculatePotTab();      
         repaint();
 
     }
     //endregion mouse listeners    
 
+    //region MarchingSquares
+    public void calcBinTab(double value) {
+    	 for (int i = 0; i < 268; i++) {
+             for (int j = 0; j < 268; j++) {
+             	if(potentialTab[j*rez][i*rez] >= value) {
+             		binTab[j][i] = 1;
+             	}
+             	else {
+             		binTab[j][i] = 0;
+             	}
+             	//System.out.print(binTab[j][i]);            	
+             }
+             //System.out.println("\n");
+         }
+    }
+    
+    public int getState(int a, int b, int c, int d) {
+    	return a*8 + b*4 + c*2 + d*1;
+    }
+    
+    //endregion MarchingSquares
+    
     //region PotentialCalculation
     public double calculateAbsCharge() {
         double tmpCharge = 0;
@@ -220,6 +312,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         Charge charge = new Charge(this.getWidth() / 2, this.getHeight() / 2, 5);
         charges.add(charge);
         calculatePotTab();
+        //calcBinTab();
         repaint();
     }
 
