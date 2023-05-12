@@ -217,14 +217,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     //endregion PotentialCalculation
 
     public void addCharge() {
-        Charge charge = new Charge(this.getWidth() / 4, this.getHeight() / 4, 1);
+        Charge charge = new Charge(this.getWidth() / 2, this.getHeight() / 2, 5);
         charges.add(charge);
-        /*Charge charge2 = new Charge(this.getWidth() * 3 / 4, this.getHeight() / 4, -1);
-        charges.add(charge2);
-        Charge charge3 = new Charge(this.getWidth() / 4, this.getHeight() * 3 / 4, -10);
-        charges.add(charge3);
-        Charge charge4 = new Charge(this.getWidth() * 3 / 4, this.getHeight() * 3 / 4, 10);
-        charges.add(charge4);*/
         calculatePotTab();
         repaint();
     }
