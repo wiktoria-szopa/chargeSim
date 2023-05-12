@@ -18,18 +18,18 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 public class CenterPanel extends JPanel implements MouseListener, MouseMotionListener {
 
     private static final int CHARGE_RADIUS = 20;
-    private static final double k = 8.9875; //*Math.pow(10, 9);
-    //private static final double eQ = 1.6 * Math.pow(10, (-19));
+    private static final double k = 8.9875;
     private double x;
     private double y;
+    
     int nextChargeId = 1;
-    Charge movingCharge = null;
+    Charge movingCharge = null;    
     
-    
-    private int rez = 3;
-    private int jump = 1;
+    private int rez = 2;
     private int dJump = 2;
-    private int binTabWidth = 268;
+    private int xJump = 1;
+    private int yJump = 1;
+    private int binTabWidth = 400;
     private double[][] potentialTab = new double[binTabWidth*rez][binTabWidth*rez];
     private int[][] binTab = new int[binTabWidth][binTabWidth];
     private double maxPot = 0;
@@ -78,54 +78,54 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         	for (double step = 0.0; step <= maxPot; step += 0.5 + step) {
             	calcBinTab(step);
                 for (int i = 0; i < binTabWidth-1; i++) {
-                    for (int j = 0; j < binTabWidth-1; j++) {                	
+                    for (int j = 0; j < binTabWidth-1; j++) {
+                    	 xJump = setJump(potentialTab[i*rez][j*rez], potentialTab[i*rez+1][j*rez], potentialTab[i*rez+2][j*rez]);
+                    	 yJump = setJump(potentialTab[i*rez][j*rez], potentialTab[i*rez][j*rez+1], potentialTab[i*rez][j*rez+2]);
                     	 state = getState(binTab[i][j], binTab[i+1][j], binTab[i+1][j+1], binTab[i][j+1]);
                     	 switch (state) {
-                    	 case 1:
-                    		 //if(potentialTab[i*rez][j*rez]>potentialTab[i*rez+rez][j*rez+rez])
-                    		 
-                    		 g2d.drawLine(i*rez, j*rez+jump, i*rez+jump, j*rez+dJump);
+                    	 case 1:               		 
+                    		 g2d.drawLine(i*rez, j*rez+yJump, i*rez+xJump, j*rez+dJump);
                     		 break;
                     	 case 2:
-                    		 g2d.drawLine(i*rez+jump, j*rez+dJump, i*rez+dJump, j*rez+jump);
+                    		 g2d.drawLine(i*rez+xJump, j*rez+dJump, i*rez+dJump, j*rez+yJump);
                     		 break;
                     	 case 3:
-                    		 g2d.drawLine(i*rez, j*rez+jump, i*rez+dJump, j*rez+jump);
+                    		 g2d.drawLine(i*rez, j*rez+yJump, i*rez+dJump, j*rez+yJump);
                     		 break; 
                     	 case 4:
-                    		 g2d.drawLine(i*rez+jump, j*rez, i*rez+dJump, j*rez+jump);
+                    		 g2d.drawLine(i*rez+xJump, j*rez, i*rez+dJump, j*rez+yJump);
                     		 break; 
                     	 case 5:
-                    		 g2d.drawLine(i*rez, j*rez+jump, i*rez+jump, j*rez);
-                    		 g2d.drawLine(i*rez+jump, j*rez+dJump, i*rez+dJump, j*rez+jump);
+                    		 g2d.drawLine(i*rez, j*rez+yJump, i*rez+xJump, j*rez);
+                    		 g2d.drawLine(i*rez+xJump, j*rez+dJump, i*rez+dJump, j*rez+yJump);
                     		 break;
                     	 case 6:
-                    		 g2d.drawLine(i*rez+jump, j*rez, i*rez+jump, j*rez+dJump);
+                    		 g2d.drawLine(i*rez+xJump, j*rez, i*rez+xJump, j*rez+dJump);
                     		 break;
                     	 case 7:
-                    		 g2d.drawLine(i*rez, j*rez+jump, i*rez+jump, j*rez);
+                    		 g2d.drawLine(i*rez, j*rez+yJump, i*rez+xJump, j*rez);
                     		 break;
                     	 case 8:
-                    		 g2d.drawLine(i*rez, j*rez+jump, i*rez+jump, j*rez);
+                    		 g2d.drawLine(i*rez, j*rez+yJump, i*rez+xJump, j*rez);
                     		 break; 
                     	 case 9:
-                    		 g2d.drawLine(i*rez+jump, j*rez, i*rez+jump, j*rez+dJump);
+                    		 g2d.drawLine(i*rez+xJump, j*rez, i*rez+xJump, j*rez+dJump);
                     		 break; 
                     	 case 10:
-                    		 g2d.drawLine(i*rez, j*rez+jump, i*rez+jump, j*rez+dJump);
-                    		 g2d.drawLine(i*rez+jump, j*rez, i*rez+dJump, j*rez+jump);
+                    		 g2d.drawLine(i*rez, j*rez+yJump, i*rez+xJump, j*rez+dJump);
+                    		 g2d.drawLine(i*rez+xJump, j*rez, i*rez+dJump, j*rez+yJump);
                     		 break;
                     	 case 11:
-                    		 g2d.drawLine(i*rez+jump, j*rez, i*rez+dJump, j*rez+jump);
+                    		 g2d.drawLine(i*rez+xJump, j*rez, i*rez+dJump, j*rez+yJump);
                     		 break;
                     	 case 12:
-                    		 g2d.drawLine(i*rez, j*rez+jump, i*rez+dJump, j*rez+jump);
+                    		 g2d.drawLine(i*rez, j*rez+yJump, i*rez+dJump, j*rez+yJump);
                     		 break;
                     	 case 13:
-                    		 g2d.drawLine(i*rez+jump, j*rez+dJump, i*rez+dJump, j*rez+jump);
+                    		 g2d.drawLine(i*rez+xJump, j*rez+dJump, i*rez+dJump, j*rez+yJump);
                     		 break; 
                     	 case 14:
-                    		 g2d.drawLine(i*rez, j*rez+jump, i*rez+jump, j*rez+dJump);
+                    		 g2d.drawLine(i*rez, j*rez+yJump, i*rez+xJump, j*rez+dJump);
                     		 break; 
                     	 case 15:
                     		 break;
@@ -181,8 +181,6 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
                 }
             }
         }
-
-
     }
 
     @Override
@@ -251,6 +249,34 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     
     public int getState(int a, int b, int c, int d) {
     	return a*8 + b*4 + c*2 + d*1;
+    }
+    
+    public int setJump(double a, double b) {
+    	int tmp_jump = 0;
+    	if(a>b) {
+    		tmp_jump = 0;
+    	}
+    	if(a==b) {
+    		tmp_jump = 1;
+    	}
+    	if(a<b) {
+    		tmp_jump = 2;
+    	}
+    	return tmp_jump;
+    }
+    
+    public int setJump(double a, double b, double c) {
+    	int tmp_jump = 0;
+    	if(a>b && a>c) {
+    		tmp_jump = 0;
+    	}
+    	if(a<b && b>c) {
+    		tmp_jump = 1;
+    	}
+    	if(a<b && b<c) {
+    		tmp_jump = 2;
+    	}
+    	return tmp_jump;
     }
     
     //endregion MarchingSquares
