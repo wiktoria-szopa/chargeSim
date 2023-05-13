@@ -251,20 +251,6 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     	return a*8 + b*4 + c*2 + d*1;
     }
     
-    public int setJump(double a, double b) {
-    	int tmp_jump = 0;
-    	if(a>b) {
-    		tmp_jump = 0;
-    	}
-    	if(a==b) {
-    		tmp_jump = 1;
-    	}
-    	if(a<b) {
-    		tmp_jump = 2;
-    	}
-    	return tmp_jump;
-    }
-    
     public int setJump(double a, double b, double c) {
     	int tmp_jump = 0;
     	if(a>b && a>c) {
@@ -332,9 +318,17 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 
     public void addCharge() {
         Charge charge = new Charge(this.getWidth() / 2, this.getHeight() / 2, 5);
+        //Charge charge2 = new Charge(600, 181, -5);
+        //Charge charge3 = new Charge(200, 543, -5);
+        //Charge charge4 = new Charge(600, 543, 5);
         charges.add(charge);
+        //charges.add(charge2);
+        //charges.add(charge3);
+        //charges.add(charge4);
         calculatePotTab();
         repaint();
+        System.out.println(charge.getX());
+        System.out.println(charge.getY());
     }
 
     private void showChargeMenu(double x, double y, Charge charge) {
