@@ -81,15 +81,15 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
             try {
 
                 BufferedReader reader = new BufferedReader(new FileReader(fileIn));
-                String line = null;
-                while (line == null) {
+                String line = reader.readLine();
+                while (line != null) {
+                    charges.add(stringToCharge(line));
                     line = reader.readLine();
-                    if (line != null) {
-                        charges.add(stringToCharge(line));
-                    }
                 }
                 reader.close();
                 panelCenter.setCharges(charges);
+                panelCenter.calculatePotTab();
+                panelCenter.repaint();
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this,
                         "Failed to open: " + openFileChooser.getSelectedFile().getAbsolutePath(),
