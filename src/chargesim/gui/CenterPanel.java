@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
@@ -350,13 +351,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     
     public void addCharge() {
         Charge charge = new Charge(this.getWidth()/2, this.getHeight()/2, 5);
-        //Charge charge2 = new Charge(600, 181, -5);
-        //Charge charge3 = new Charge(200, 543, -5);
-        //Charge charge4 = new Charge(600, 543, 5);
         charges.add(charge);
-        //charges.add(charge2);
-        //charges.add(charge3);
-        //charges.add(charge4);
         calculatePotTab();
         repaint();
     }
@@ -475,7 +470,17 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 
     public void clearChargesArray() {
         charges.clear();
+        calculatePotTab();
         this.repaint();
+    }
+
+    public List<Charge> getCharges() {
+        return charges;
+    }
+
+    public void setCharges(List<Charge> charges){
+        this.charges = charges;
+        repaint();
     }
     //enndregion get/set
 
