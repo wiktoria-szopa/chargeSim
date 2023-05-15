@@ -446,11 +446,17 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 
     public void clearChargesArray() {
         charges.clear();
+        calculatePotTab();
         this.repaint();
     }
 
     public List<Charge> getCharges() {
         return charges;
+    }
+
+    public void setCharges(List<Charge> charges){
+        this.charges = charges;
+        repaint();
     }
 
     //enndregion get/set

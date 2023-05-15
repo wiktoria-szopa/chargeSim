@@ -4,10 +4,9 @@ package chargesim.gui;
 import chargesim.Charge;
 
 import java.awt.event.*;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.awt.*;
@@ -59,10 +58,44 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
                 }
                 fileOutWriter.close();
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(this,"Failed to save into a file","ERROR",
+                JOptionPane.showMessageDialog(this,
+                        "Failed to save into a file",
+                        "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             }
 
+        }
+    }
+
+    @Override
+    public void onOpenClicked() {
+        java.util.List<Charge> charges = new ArrayList<>();
+        JFileChooser openFileChooser = new JFileChooser();
+        openFileChooser.setApproveButtonText("Open");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "charge sim files", "cs");
+        openFileChooser.setFileFilter(filter);
+        int returnVal = openFileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File fileIn = openFileChooser.getSelectedFile();
+            try {
+
+                BufferedReader reader = new BufferedReader(new FileReader(fileIn));
+                String line = null;
+                while (line == null) {
+                    line = reader.readLine();
+                    if (line != null) {
+                        charges.add(stringToCharge(line));
+                    }
+                }
+                reader.close();
+                panelCenter.setCharges(charges);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Failed to open: " + openFileChooser.getSelectedFile().getAbsolutePath(),
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -94,6 +127,15 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     //endregion centerpanel listener
 
     private String chargeToString(Charge charge) {
-        return String.format("%f\t%f\t%f", charge.getX(), charge.getY(), charge.getValue());
+        return String.format(Locale.US,"%f\t%f\t%f", charge.getX(), charge.getY(), charge.getValue());
+    }
+
+    private Charge stringToCharge(String line){
+        String [] tmp = line.split("\t");
+        double x = Double.parseDouble(tmp[0]);
+        double y = Double.parseDouble(tmp[1]);
+        double q = Double.parseDouble(tmp[2]);
+
+        return new Charge(x,y,q);
     }
 }

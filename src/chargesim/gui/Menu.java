@@ -13,6 +13,7 @@ public class Menu extends JMenuBar {
         void addChargeClicked();
         void newItemChosen();
         void onSaveClicked();
+        void onOpenClicked();
     }
 
     //region fields
@@ -90,6 +91,8 @@ public class Menu extends JMenuBar {
         newItem.addActionListener(e -> listener.newItemChosen());
 
         saveItem.addActionListener(e -> listener.onSaveClicked());
+
+        openItem.addActionListener(e -> listener.onOpenClicked());
 
         menuColor.add(backgroundColorItem);
         menuColor.add(equipotentialColorItem);
