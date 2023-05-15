@@ -12,6 +12,7 @@ public class Menu extends JMenuBar {
         void equipotentialColorChosen(Color color);
         void addChargeClicked();
         void newItemChosen();
+        void onSaveClicked();
     }
 
     //region fields
@@ -76,7 +77,7 @@ public class Menu extends JMenuBar {
         });
 
         equipotentialColorItem.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Color isolineColor = JColorChooser.showDialog(null, "Pick a isoline color", Color.BLACK);
@@ -84,21 +85,11 @@ public class Menu extends JMenuBar {
 			}
 		});
         
-        chargeItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                listener.addChargeClicked();
-            }
-        });
+        chargeItem.addActionListener(e -> listener.addChargeClicked());
         
-        newItem.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				listener.newItemChosen();
-				
-			}
-		});
+        newItem.addActionListener(e -> listener.newItemChosen());
+
+        saveItem.addActionListener(e -> listener.onSaveClicked());
 
         menuColor.add(backgroundColorItem);
         menuColor.add(equipotentialColorItem);
