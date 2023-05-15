@@ -44,6 +44,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         void cursorMoved(double x, double y);
 
         void potentialChange(double v);
+        
+        void EChange(double ex, double ey);
     }
 
     Listener listener;
@@ -73,7 +75,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         
         g2d.setColor(equipotentialColor);
         int state = 0;
-        g2d.setStroke( new BasicStroke(2));
+        g2d.setStroke(new BasicStroke(2));
         if(charges.size() != 0) {
         	for (double step = 0.0; step <= maxPot; step += 0.5 + step) {
             	calcBinTab(step);
@@ -168,6 +170,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         y = y / 100;
         listener.cursorMoved(x, y);
         listener.potentialChange(calculatePotential(x, y));
+        listener.EChange(calcExField(x, y), calcEyField(x, y));
     }
 
     @Override
@@ -220,6 +223,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 
     @Override
     public void mouseDragged(MouseEvent e) {
+    	
         if (movingCharge == null) {
             return;
         }
@@ -227,6 +231,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         int tmpY = e.getY();
         movingCharge.setX(tmpX);
         movingCharge.setY(tmpY);
+        mouseMoved(e);
         calculatePotTab();      
         repaint();
 
@@ -287,6 +292,10 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     private double calculateDistance(double x1, double y1, double x2, double y2) {
         return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     }
+    
+    private double calcThirdDistance(double x1, double y1, double x2, double y2) {
+        return Math.pow(((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)),1.5);
+    }
 
     //tablica wartosc bezwglendych potencjalu w danych punktach
     public void calculatePotTab() {
@@ -315,9 +324,32 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         }
     }        
     //endregion PotentialCalculation
-
+    
+    //region ElectricFieldCalculation
+    private double calcExField(double x, double y) {
+    	double tmpEx =0;
+    	for (Charge charge : charges) {
+            tmpEx += (x- charge.getX()/100) * charge.getValue() / calcThirdDistance(x, y, charge.getX() / 100, charge.getY() / 100);
+        }
+    	return k * tmpEx;
+    }
+    
+    private double calcEyField(double x, double y) {
+    	double tmpEy =0;
+    	for (Charge charge : charges) {
+            tmpEy += (y- charge.getY()/100) * charge.getValue() / calcThirdDistance(x, y, charge.getX() / 100, charge.getY() / 100);
+        }
+    	return k * tmpEy;
+    }
+    
+    public void calculateETab() {
+    	
+    }
+    
+    //endregion ElectricFieldCalculation
+    
     public void addCharge() {
-        Charge charge = new Charge(this.getWidth() / 2, this.getHeight() / 2, 5);
+        Charge charge = new Charge(this.getWidth()/2, this.getHeight()/2, 5);
         //Charge charge2 = new Charge(600, 181, -5);
         //Charge charge3 = new Charge(200, 543, -5);
         //Charge charge4 = new Charge(600, 543, 5);
@@ -327,8 +359,6 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         //charges.add(charge4);
         calculatePotTab();
         repaint();
-        System.out.println(charge.getX());
-        System.out.println(charge.getY());
     }
 
     private void showChargeMenu(double x, double y, Charge charge) {
