@@ -1,11 +1,18 @@
 package chargesim.gui;
 
 
+import chargesim.Charge;
+
 import java.awt.event.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     //panele
@@ -21,21 +28,48 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
 
         add(BorderLayout.CENTER, panelCenter);
         add(BorderLayout.SOUTH, panelDown);
-        
+
         setJMenuBar(menuBar);
         menuBar.listener = this;
-        panelCenter.listener = this;     
+        panelCenter.listener = this;
     }
 
     //region menu listener
     public void newItemChosen() {
-    	panelCenter.clearChargesArray();
+        panelCenter.clearChargesArray();
     }
-    
+
+    @Override
+    public void onSaveClicked() {
+        java.util.List<Charge> charges = panelCenter.getCharges();
+
+        JFileChooser saveFileChooser = new JFileChooser();
+        saveFileChooser.setApproveButtonText("Save");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "charge sim files", "cs");
+        saveFileChooser.setFileFilter(filter);
+        int returnVal = saveFileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File fileOut = new File(saveFileChooser.getSelectedFile() + ".cs");
+            try {
+                BufferedWriter fileOutWriter = new BufferedWriter(new FileWriter(fileOut));
+                for (Charge charge : charges) {
+                    fileOutWriter.write(chargeToString(charge));
+                    fileOutWriter.newLine();
+                }
+                fileOutWriter.close();
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this,"Failed to save into a file","ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
+    }
+
     public void equipotentialColorChosen(Color color) {
-    	panelCenter.setEquipotentialColor(color);
+        panelCenter.setEquipotentialColor(color);
     }
-    
+
     public void backgroundColorChosen(Color color) {
         panelCenter.setBackground(color);
     }
@@ -59,4 +93,7 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     }
     //endregion centerpanel listener
 
+    private String chargeToString(Charge charge) {
+        return String.format("%f\t%f\t%f", charge.getX(), charge.getY(), charge.getValue());
+    }
 }

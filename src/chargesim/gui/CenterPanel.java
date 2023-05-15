@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
@@ -327,8 +328,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         //charges.add(charge4);
         calculatePotTab();
         repaint();
-        System.out.println(charge.getX());
-        System.out.println(charge.getY());
+        //System.out.println(charge.getX());
+        //System.out.println(charge.getY());
     }
 
     private void showChargeMenu(double x, double y, Charge charge) {
@@ -447,6 +448,11 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         charges.clear();
         this.repaint();
     }
+
+    public List<Charge> getCharges() {
+        return charges;
+    }
+
     //enndregion get/set
 
 }
