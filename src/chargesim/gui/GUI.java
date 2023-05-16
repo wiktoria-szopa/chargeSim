@@ -125,9 +125,18 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
         panelDown.renderPotential(v);
     }
     
+    public void setPotential() {
+    	panelDown.setPotential();
+    }
+    
     public void EChange(double ex, double ey) {
     	panelDown.renderE(ex, ey);
     }
+    
+    public void setE() {
+    	panelDown.setE();
+    }
+    
     //endregion centerpanel listener
 
     private String chargeToString(Charge charge) {

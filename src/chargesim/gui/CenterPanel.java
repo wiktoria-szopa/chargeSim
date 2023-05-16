@@ -43,10 +43,10 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 
     public interface Listener {
         void cursorMoved(double x, double y);
-
-        void potentialChange(double v);
-        
-        void EChange(double ex, double ey);
+        void potentialChange(double v);        
+        void EChange(double ex, double ey);       
+        void setPotential();        
+        void setE();
     }
 
     Listener listener;
@@ -176,12 +176,12 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int tmpX = e.getX();
-        int tmpY = e.getY();
+        x = e.getX();
+        y = e.getY();
         if (SwingUtilities.isRightMouseButton(e)) {
             for (Charge charge : charges) {
-                if (calculateDistance(tmpX, tmpY, charge.getX(), charge.getY()) < CHARGE_RADIUS) {
-                    showChargeMenu(tmpX, tmpY, charge);
+                if (calculateDistance(x, y, charge.getX(), charge.getY()) < CHARGE_RADIUS) {
+                    showChargeMenu(x, y, charge);
                 }
             }
         }
@@ -191,11 +191,11 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     public void mousePressed(MouseEvent e) {
         if (!SwingUtilities.isLeftMouseButton(e))
             return;
-        int tmpX = e.getX();
-        int tmpY = e.getY();
+        x = e.getX();
+        y = e.getY();
         boolean chargeFound = false;
         for (Charge charge : charges) {
-            if (calculateDistance(tmpX, tmpY, charge.getX(), charge.getY()) < CHARGE_RADIUS) {
+            if (calculateDistance(x, y, charge.getX(), charge.getY()) < CHARGE_RADIUS) {
                 movingCharge = charge;
                 chargeFound = true;
                 break;
@@ -228,14 +228,17 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         if (movingCharge == null) {
             return;
         }
-        int tmpX = e.getX();
-        int tmpY = e.getY();
-        movingCharge.setX(tmpX);
-        movingCharge.setY(tmpY);
-        mouseMoved(e);
-        calculatePotTab();      
+        x = e.getX();
+        y = e.getY();
+        movingCharge.setX(x);
+        movingCharge.setY(y);        
+        x = x / 100;
+        y = y / 100;
+        listener.cursorMoved(x, y);
+        listener.setPotential();
+        listener.setE();        
+        calculatePotTab();
         repaint();
-
     }
     //endregion mouse listeners    
 
@@ -300,11 +303,13 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 
     //tablica wartosc bezwglendych potencjalu w danych punktach
     public void calculatePotTab() {
-        if (charges.size() != 0) {
+        //if (charges.size() != 0) {
+    	double ii;
+        double jj;
             for (int i = 0; i < binTabWidth*rez; i++) {
                 for (int j = 0; j < binTabWidth*rez; j++) {
-                    double ii = i;
-                    double jj = j;
+                    ii = i;
+                    jj = j;
                     ii = ii / 100;
                     jj = jj / 100;
                     
@@ -322,7 +327,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
                     }
                 }
             }
-        }
+        //}
     }        
     //endregion PotentialCalculation
     
@@ -341,12 +346,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
             tmpEy += (y- charge.getY()/100) * charge.getValue() / calcThirdDistance(x, y, charge.getX() / 100, charge.getY() / 100);
         }
     	return k * tmpEy;
-    }
-    
-    public void calculateETab() {
-    	
-    }
-    
+    }       
     //endregion ElectricFieldCalculation
     
     public void addCharge() {

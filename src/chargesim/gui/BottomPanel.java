@@ -44,6 +44,13 @@ public class BottomPanel extends JPanel {
     public void renderE(double Ex, double Ey) {
         E.setText( "(" + String.format("%.2f", Ex) + " , " + String.format("%.2f", Ey) + ")" + " V/m");
     }
+
+	public void setPotential() {
+		potential.setText("... V");	
+	}
     
+	public void setE() {
+		E.setText("(... , ...)  V/m");	
+	}
 
 }
