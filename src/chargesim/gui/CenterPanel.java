@@ -34,6 +34,9 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     private double[][] potentialTab = new double[binTabWidth*rez][binTabWidth*rez];
     private int[][] binTab = new int[binTabWidth][binTabWidth];
     private double maxPot = 0;
+    
+    private double[][] ExTab = new double[binTabWidth*rez][binTabWidth*rez];
+    private double[][] EyTab = new double[binTabWidth*rez][binTabWidth*rez];
 
     private BufferedImage positiveImage;
     private BufferedImage negativeImage;
@@ -347,6 +350,54 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         }
     	return k * tmpEy;
     }       
+    
+    public void calculateExTab() {
+    	double ii;
+        double jj;
+            for (int i = 0; i < binTabWidth*rez; i++) {
+                for (int j = 0; j < binTabWidth*rez; j++) {
+                    ii = i;
+                    jj = j;
+                    ii = ii / 100;
+                    jj = jj / 100;
+                    
+                    if(Math.abs(calcExField(ii,jj)) <= 100000) {
+                    	ExTab[i][j] = calcExField(ii,jj);
+                    }
+                    else {
+                    	ExTab[i][j] = 0.25*(Math.abs(calcExField(ii-1, jj)) +
+                    		Math.abs(calcExField(ii, jj+1)) +
+                    		Math.abs(calcExField(ii+1, jj)) +
+                    		Math.abs(calcExField(ii, jj-1)));
+                    }                                        
+                }
+            }
+        
+    }
+    
+    public void calculateEyTab() {
+    	double ii;
+        double jj;
+            for (int i = 0; i < binTabWidth*rez; i++) {
+                for (int j = 0; j < binTabWidth*rez; j++) {
+                    ii = i;
+                    jj = j;
+                    ii = ii / 100;
+                    jj = jj / 100;
+                    
+                    if(Math.abs(calcEyField(ii,jj)) <= 100000) {
+                    	EyTab[i][j] = calcEyField(ii,jj);
+                    }
+                    else {
+                    	EyTab[i][j] = 0.25*(Math.abs(calcEyField(ii-1, jj)) +
+                    		Math.abs(calcEyField(ii, jj+1)) +
+                    		Math.abs(calcEyField(ii+1, jj)) +
+                    		Math.abs(calcEyField(ii, jj-1)));
+                    }                                        
+                }
+            }
+        System.out.println(EyTab[100][100]);
+    }        
     //endregion ElectricFieldCalculation
     
     public void addCharge() {
