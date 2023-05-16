@@ -36,6 +36,8 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     //region menu listener
     public void newItemChosen() {
         panelCenter.clearChargesArray();
+        panelCenter.setBackground(Color.white);
+        panelCenter.setEquipotentialColor(Color.black);
     }
 
     @Override
