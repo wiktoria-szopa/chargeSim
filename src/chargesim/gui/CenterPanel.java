@@ -18,7 +18,7 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class CenterPanel extends JPanel implements MouseListener, MouseMotionListener {
 
-    private static final int CHARGE_RADIUS = 20;
+    private static final int CHARGE_RADIUS = 30;
     private static final double k = 8.9875;
     private double x;
     private double y;
@@ -35,13 +35,20 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     private int[][] binTab = new int[binTabWidth][binTabWidth];
     private double maxPot = 0;
     private int iRez;
-    private int jRez;    
+    private int jRez;
+    
+    private int rezE = 21;
+    private int widthETab = (int)Math.ceil(800/21);
+    private double[][] ExTab = new double[widthETab][widthETab];
+    private double[][] EyTab = new double[widthETab][widthETab];
+    private double maxEx = 0;
+    private double maxEy = 0;
 
     private BufferedImage positiveImage;
     private BufferedImage negativeImage;
 
     private Color equipotentialColor = Color.black;
-    private Color forceLineColor = Color.black;
+    private Color forceLineColor = Color.blue;
 
     public interface Listener {
         void cursorMoved(double x, double y);
@@ -125,7 +132,243 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         }
         g2d.setColor(Color.black);
         
+        /*
+        int stateE;
+        if(charges.size() != 0) {
+        	for (int i = 0; i < widthETab; i++) {
+                for (int j =0; j < widthETab; j++) {
+                	stateE = getEState2(ExTab[i][j], EyTab[i][j], maxEx, maxEy);
+                	switch(stateE) {
+                	case 0:                		                		
+                		break;
+                	case 1:                		
+                		g2d.drawLine(rezE*i+1, rezE*j+5, rezE*i+rezE-2, rezE*j+5);
+                		break;
+                	case 2:
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+1, rezE*j+6, rezE*i+rezE-2, rezE*j+4);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+1, rezE*j+4, rezE*i+rezE-2, rezE*j+6);
+                		}
+                		break;
+                	case 3:
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+1, rezE*j+7, rezE*i+rezE-2, rezE*j+3);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+1, rezE*j+3, rezE*i+rezE-2, rezE*j+7);
+                		}
+                		break;
+                	case 4:                		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+1, rezE*j+8, rezE*i+rezE-2, rezE*j+2);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+1, rezE*j+2, rezE*i+rezE-2, rezE*j+8);
+                		}
+                		break;
+                	case 5:                		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+1, rezE*j+9, rezE*i+rezE-2, rezE*j+1);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+1, rezE*j+1, rezE*i+rezE-2, rezE*j+9);
+                		}
+                		break;
+                	case 6:                		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+2, rezE*9, rezE*i+8, rezE*j+1);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+2, rezE*1, rezE*i+8, rezE*j+9);
+                		}
+                		break;
+                	case 7:               		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+3, rezE*9, rezE*i+7, rezE*j+1);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+3, rezE*1, rezE*i+7, rezE*j+9);
+                		}
+                		break;
+                	case 8:
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+4, rezE*9, rezE*i+6, rezE*j+1);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+4, rezE*1, rezE*i+6, rezE*j+9);
+                		}
+                		break;
+                	case 9:               		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+5, rezE*9, rezE*i+5, rezE*j+1);
+                		}
 
+                	}
+                }
+        	}
+        }
+        */
+        int stateE;
+        g2d.setStroke(new BasicStroke(2));
+        if(charges.size() != 0) {
+        	for (int i = 0; i < widthETab; i++) {
+                for (int j =0; j < widthETab; j++) {
+                	stateE = getEState2(ExTab[i][j], EyTab[i][j], maxEx, maxEy);
+                	g2d.setColor(calcColor(ExTab[i][j], EyTab[i][j]));
+                	switch(stateE) {
+                	case 0:                		                		
+                		break;
+                	case 1:                		
+                		g2d.drawLine(rezE*i+1, rezE*j+10, rezE*i+rezE-2, rezE*j+10);
+                		break;
+                	case 2:
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+1, rezE*j+11, rezE*i+rezE-2, rezE*j+9);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+1, rezE*j+9, rezE*i+rezE-2, rezE*j+11);
+                		}
+                		break;
+                	case 3:
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+1, rezE*j+12, rezE*i+rezE-2, rezE*j+8);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+1, rezE*j+8, rezE*i+rezE-2, rezE*j+12);
+                		}
+                		break;
+                	case 4:                		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+1, rezE*j+13, rezE*i+rezE-2, rezE*j+7);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+1, rezE*j+7, rezE*i+rezE-2, rezE*j+13);
+                		}
+                		break;
+                	case 5:                		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+1, rezE*j+14, rezE*i+rezE-2, rezE*j+6);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+1, rezE*j+6, rezE*i+rezE-2, rezE*j+14);
+                		}
+                		break;
+                	case 6:                		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+1, rezE*j+15, rezE*i+rezE-2, rezE*j+5);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+1, rezE*j+5, rezE*i+rezE-2, rezE*j+15);
+                		}
+                		break;
+                	case 7:               		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+1, rezE*j+16, rezE*i+rezE-2, rezE*j+4);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+1, rezE*j+4, rezE*i+rezE-2, rezE*j+16);
+                		}
+                		break;
+                	case 8:
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+1, rezE*j+17, rezE*i+rezE-2, rezE*j+3);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+1, rezE*j+3, rezE*i+rezE-2, rezE*j+17);
+                		}
+                		break;
+                	case 9:               		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+1, rezE*j+18, rezE*i+rezE-2, rezE*j+2);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+1, rezE*j+2, rezE*i+rezE-2, rezE*j+18);
+                		}
+                		break;
+                	case 10:                		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+1, rezE*j+19, rezE*i+rezE-2, rezE*j+1);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+1, rezE*j+1, rezE*i+rezE-2, rezE*j+19);
+                		}
+                		break;
+                	case 11:                		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+2, rezE*j+19, rezE*i+18, rezE*j+1);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+2, rezE*j+1, rezE*i+18, rezE*j+19);
+                		}
+                		break;
+                	case 12:               		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+3, rezE*j+19, rezE*i+17, rezE*j+1);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+3, rezE*j+1, rezE*i+17, rezE*j+19);
+                		}
+                		break;
+                	case 13:                		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+4, rezE*j+19, rezE*i+16, rezE*j+1);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+4, rezE*j+1, rezE*i+16, rezE*j+19);
+                		}
+                		break;
+                	case 14:
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+5, rezE*j+19, rezE*i+15, rezE*j+1);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+5, rezE*j+1, rezE*i+15, rezE*j+19);
+                		}
+                		break;
+                	case 15:               		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+6, rezE*j+19, rezE*i+14, rezE*j+1);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+6, rezE*j+1, rezE*i+14, rezE*j+19);
+                		}
+                		break;
+                	case 16:               		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+7, rezE*j+19, rezE*i+13, rezE*j+1);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+7, rezE*j+1, rezE*i+13, rezE*j+19);
+                		}
+                		break;
+                	case 17:                		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+8, rezE*j+19, rezE*i+12, rezE*j+1);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+8, rezE*j+1, rezE*i+12, rezE*j+19);
+                		}
+                		break;
+                	case 18:                		
+                		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                			g2d.drawLine(rezE*i+9, rezE*j+19, rezE*i+11, rezE*j+1);
+                		}
+                		else {
+                			g2d.drawLine(rezE*i+9, rezE*j+1, rezE*i+11, rezE*j+19);
+                		}
+                		break;
+                	case 19:               		
+                			g2d.drawLine(rezE*i+10, rezE*j+19, rezE*i+10, rezE*j+1);
+                		break;
+
+                	}
+                }
+        	}
+        }
+        
+        
 
         for (Charge charge : charges) {
             if (charge.getValue() < 0) {
@@ -147,6 +390,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
             }
         }
     }
+    
 
     //region mouse listeners
     @Override
@@ -224,7 +468,10 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         listener.setPotential();
         listener.setE();        
         calculatePotTab();
+        calculateExTab();
+        calculateEyTab();
         repaint();
+        
     }
     //endregion mouse listeners    
 
@@ -284,36 +531,37 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     }
     
     private double calcThirdDistance(double x1, double y1, double x2, double y2) {
-        return Math.pow(((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)),1.5);
+    	double tmp_r2 = ((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+    	return (Math.sqrt(tmp_r2)*tmp_r2);
     }
 
     //tablica wartosc bezwglendych potencjalu w danych punktach
     public void calculatePotTab() {
-        //if (charges.size() != 0) {
+        if (charges.size() != 0) {
     	double ii;
         double jj;
-            for (int i = 0; i < binTabWidth*rez; i++) {
-                for (int j = 0; j < binTabWidth*rez; j++) {
-                    ii = i;
-                    jj = j;
-                    ii = ii / 100;
-                    jj = jj / 100;
+        for (int i = 0; i < binTabWidth*rez; i++) {
+        	for (int j = 0; j < binTabWidth*rez; j++) {
+        		ii = i;
+        		jj = j;
+        		ii = ii / 100;
+        		jj = jj / 100;
                     
-                    if(Math.abs(calculatePotential(ii, jj)) <= 50000) {
-                    	potentialTab[i][j] = Math.abs(calculatePotential(ii, jj));
-                    }
-                    else {
-                    	potentialTab[i][j] = 0.25*(Math.abs(calculatePotential(ii-1, jj)) +
+        		if(Math.abs(calculatePotential(ii, jj)) <= 50000) {
+        			potentialTab[i][j] = Math.abs(calculatePotential(ii, jj));
+        		}
+        		else {
+        			potentialTab[i][j] = 0.25*(Math.abs(calculatePotential(ii-1, jj)) +
                     		Math.abs(calculatePotential(ii, jj+1)) +
                     		Math.abs(calculatePotential(ii+1, jj)) +
                     		Math.abs(calculatePotential(ii, jj-1)));
-                    }                                        
-                    if(potentialTab[i][j] >= maxPot) {
+        		}                                        
+        		if(potentialTab[i][j] >= maxPot) {
                     	maxPot = potentialTab[i][j];
-                    }
-                }
+        		}
             }
-        //}
+       }
+       }
     }        
     //endregion PotentialCalculation
     
@@ -332,14 +580,255 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
             tmpEy += (y- charge.getY()/100) * charge.getValue() / calcThirdDistance(x, y, charge.getX() / 100, charge.getY() / 100);
         }
     	return k * tmpEy;
-    }              
+    } 
+    
+    public void zeroETab() {
+    	for (int i = 0; i < widthETab; i++) {
+        	for (int j = 0; j < widthETab; j++) {
+        		ExTab[i][j] = 0;
+        		EyTab[i][j] = 0;
+        	}
+    	}
+    }
+    
+    public void calculateExTab() {
+    	double ii;
+        double jj;
+        if (charges.size() != 0) {
+        for (int i = 0; i < widthETab; i++) {
+        	for (int j = 0; j < widthETab; j++) {
+        		ii = i;
+        		jj = j;
+        		ii = rezE*(ii / 100);
+        		jj = rezE*(jj / 100);
+                    
+        		if(Math.abs(calcExField(ii,jj)) <= 10000) {
+        			ExTab[i][j] = calcExField(ii,jj);
+        		}
+                    	
+        		else {
+        			ExTab[i][j] = 0.25*(calcExField(ii-1, jj) +
+                    		calcExField(ii, jj+1) +
+                    		calcExField(ii+1, jj) +
+                    		calcExField(ii, jj-1));
+                }                                 
+        	if(Math.abs(ExTab[i][j]) >= Math.abs(maxEx) && Math.abs(ExTab[i][j]) < 1000) {
+                	maxEx = Math.abs(ExTab[i][j]);
+    		}
+        	else {
+        		maxEx = 1000;
+        	}
+        	}
+        }
+        }
+        
+    }
+    
+    public void calculateEyTab() {
+    	double ii;
+        double jj;
+        if (charges.size() != 0) {
+        for (int i = 0; i < widthETab; i++) {
+            for (int j = 0; j < widthETab; j++) {
+                ii = i;
+                jj = j;
+                ii = rezE*(ii / 100);
+                jj = rezE*(jj / 100);
+                    
+                if(Math.abs(calcEyField(ii,jj)) <= 10000) {
+                    	EyTab[i][j] = calcEyField(ii,jj);
+                }
+                else {
+                    	EyTab[i][j] = 0.25*(calcEyField(ii-1, jj) +
+                    		calcEyField(ii, jj+1) +
+                    		calcEyField(ii+1, jj) +
+                    		calcEyField(ii, jj-1));
+                    }     
+                if(Math.abs(EyTab[i][j]) >= Math.abs(maxEy) && Math.abs(EyTab[i][j]) < 1000) {
+                    	maxEy = Math.abs(EyTab[i][j]);
+        		}
+                else {
+                	maxEy = 1000;
+                }
+            }
+        }
+        }
+    }
+    
+    int getEState(double a, double b) {
+    	int tmp_s = 0;
+    	if(a == 0 && b != 0) {
+    		tmp_s = 1;
+    	}
+    	if(b == 0 && a != 0) {
+    		tmp_s = 2;
+    	}
+    	if(a != 0 && b != 0) {
+    		a = Math.signum(a);
+    		b = Math.signum(b);
+    		if(a/b == 1) {
+    			tmp_s = 3;
+    		}
+    		if(a/b == -1) {
+    			tmp_s = 4;
+    		}
+    	}
+    	return tmp_s;
+    }
+    
+    int getEState2(double a, double b, double c, double d) {
+    	double il = 0;
+    	double maxIl = 1;
+    	if(a == 0 && b != 0) {
+    		return 19;
+    	}
+    	if(b == 0 && a != 0) {
+    		return 1;
+    	}
+    	if(a != 0 && b != 0) {
+    		il = Math.abs(b/a);        	
+        	if(il < 0.1*maxIl) {
+        		return 1;
+        	}
+        	if(il < 0.2*maxIl) {
+        		return 2;
+        	}
+        	if(il < 0.3*maxIl) {
+        		return 3;
+        	}
+        	if(il < 0.4*maxIl) {
+        		return 4;
+        	}
+        	if(il < 0.5*maxIl) {
+        		return 5;
+        	}
+        	if(il < 0.6*maxIl) {
+        		return 6;
+        	}
+        	if(il < 0.7*maxIl) {
+        		return 7;
+        	}
+        	if(il < 0.8*maxIl) {
+        		return 8;
+        	}
+        	if(il < 0.9*maxIl) {
+        		return 9;
+        	}
+        	if(il < maxIl) {
+        		return 10;
+        	}
+        	if(il < 1.1*maxIl) {
+        		return 11;
+        	}
+        	if(il < 1.2*maxIl) {
+        		return 12;
+        	}
+        	if(il < 1.3*maxIl) {
+        		return 13;
+        	}
+        	if(il < 1.4*maxIl) {
+        		return 14;
+        	}
+        	if(il < 1.5*maxIl) {
+        		return 15;
+        	}
+        	if(il < 1.6*maxIl) {
+        		return 16;
+        	}
+        	if(il < 1.7*maxIl) {
+        		return 17;
+        	}
+        	if(il > 1.8*maxIl) {
+        		return 18;
+        	}
+        	if(il > 1.9*maxIl) {
+        		return 19;
+        	}
+    	}
+    	return 0;
+    } 
+    
+    Color calcColor(double a, double b) {
+    	double tmp_d = Math.sqrt(a*a+b*b);
+    	double tmp_max = Math.sqrt(maxEx*maxEx+maxEy*maxEy);
+    	Color tmp_color = forceLineColor;
+    	if(tmp_d < 0.002*tmp_max) {
+    		tmp_color = new Color(forceLineColor.getRed(),forceLineColor.getGreen(), forceLineColor.getBlue(),50);
+    		return tmp_color;
+    	}
+    	if(tmp_d < 0.007*tmp_max) {
+    		tmp_color = new Color(forceLineColor.getRed(),forceLineColor.getGreen(), forceLineColor.getBlue(),100);
+    		return tmp_color;
+    	}
+    	if(tmp_d < 0.015*tmp_max) {
+    		tmp_color = new Color(forceLineColor.getRed(),forceLineColor.getGreen(), forceLineColor.getBlue(),150);
+    		return tmp_color;
+    	}
+    	if(tmp_d < 0.03*tmp_max) {
+    		tmp_color = new Color(forceLineColor.getRed(),forceLineColor.getGreen(), forceLineColor.getBlue(),200);
+    		return tmp_color;
+    	}
+    	if(tmp_d > 0.035*tmp_max) {
+    		tmp_color = new Color(forceLineColor.getRed(),forceLineColor.getGreen(), forceLineColor.getBlue(),250);
+    		return tmp_color;
+    	}
+    	return tmp_color;
+    }
+    /*
+    int getEState2(double a, double b, double c, double d) {
+    	double il = 0;
+    	double maxIl = 1;
+    	if(a == 0 && b != 0) {
+    		return 9;
+    	}
+    	if(b == 0 && a != 0) {
+    		return 1;
+    	}
+    	if(a != 0 && b != 0) {
+    		il = Math.abs(b/a);        	
+        	if(il < 0.2*maxIl) {
+        		return 1;
+        	}
+        	if(il < 0.4*maxIl) {
+        		return 2;
+        	}
+        	if(il < 0.6*maxIl) {
+        		return 3;
+        	}
+        	if(il < 0.8*maxIl) {
+        		return 4;
+        	}
+        	if(il < maxIl) {
+        		return 5;
+        	}
+        	if(il < 1.2*maxIl) {
+        		return 6;
+        	}
+        	if(il < 1.4*maxIl) {
+        		return 7;
+        	}
+        	if(il < 1.6*maxIl) {
+        		return 8;
+        	}
+        	if(il > 1.6*maxIl) {
+        		return 9;
+        	}
+    	}
+    	return 0;
+    } */
+    
+    
     //endregion ElectricFieldCalculation
     
     public void addCharge() {
         Charge charge = new Charge(this.getWidth()/2, this.getHeight()/2, 5);
         charges.add(charge);
         calculatePotTab();
+        calculateExTab();
+        calculateEyTab();
         repaint();
+        System.out.println(ExTab[10][10]);
+        System.out.println(EyTab[10][10]);
     }
 
     private void showChargeMenu(double x, double y, Charge charge) {
@@ -373,6 +862,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
             public void stateChanged(ChangeEvent e) {
                 charge.setValue(chargeValueInput.getValue());
                 calculatePotTab();
+                calculateExTab();
+                calculateEyTab();                            
                 repaint();
 
             }
@@ -393,6 +884,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
             public void actionPerformed(ActionEvent e) {
                 charge.setValue(initialChargeValue);
                 calculatePotTab();
+                calculateExTab();
+                calculateEyTab();
                 repaint();
                 editMenuFrame.dispose();
             }
@@ -418,6 +911,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
             public void actionPerformed(ActionEvent e) {
                 charges.remove(charge);
                 calculatePotTab();
+                calculateExTab();
+                calculateEyTab();
                 repaint();
 
             }
@@ -430,6 +925,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
                 int newChargeY = CenterPanel.this.getHeight()/2;
                 charges.add(new Charge(newChargeX, newChargeY, charge.getValue()));
                 calculatePotTab();
+                calculateExTab();
+                calculateEyTab();
                 repaint();
             }
         });
@@ -457,6 +954,9 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     public void clearChargesArray() {
         charges.clear();
         calculatePotTab();
+        zeroETab();
+        calculateExTab();
+        calculateEyTab();
         this.repaint();
     }
 
