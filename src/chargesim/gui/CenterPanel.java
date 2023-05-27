@@ -90,50 +90,32 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
                     	 yJump = setJump(potentialTab[iRez][jRez], potentialTab[iRez][jRez+1], potentialTab[iRez][jRez+2]);
                     	 state = getState(binTab[i][j], binTab[i+1][j], binTab[i+1][j+1], binTab[i][j+1]);
                     	 switch (state) {
-                    	 case 1:               		 
+                    	 case 1: case 14:             		 
                     		 g2d.drawLine(iRez, jRez+yJump, iRez+xJump, jRez+dJump);
                     		 break;
-                    	 case 2:
+                    	 case 2: case 13:
                     		 g2d.drawLine(iRez+xJump, jRez+dJump, iRez+dJump, jRez+yJump);
                     		 break;
-                    	 case 3:
+                    	 case 3: case 12:
                     		 g2d.drawLine(iRez, jRez+yJump, iRez+dJump, jRez+yJump);
                     		 break; 
-                    	 case 4:
+                    	 case 4: case 11:
                     		 g2d.drawLine(iRez+xJump, jRez, iRez+dJump, jRez+yJump);
                     		 break; 
                     	 case 5:
                     		 g2d.drawLine(iRez, jRez+yJump, iRez+xJump, jRez);
                     		 g2d.drawLine(iRez+xJump, jRez+dJump, iRez+dJump, jRez+yJump);
                     		 break;
-                    	 case 6:
+                    	 case 6: case 9:
                     		 g2d.drawLine(iRez+xJump, jRez, iRez+xJump, jRez+dJump);
                     		 break;
-                    	 case 7:
+                    	 case 7: case 8:
                     		 g2d.drawLine(iRez, jRez+yJump, iRez+xJump, jRez);
                     		 break;
-                    	 case 8:
-                    		 g2d.drawLine(iRez, jRez+yJump, iRez+xJump, jRez);
-                    		 break; 
-                    	 case 9:
-                    		 g2d.drawLine(iRez+xJump, jRez, iRez+xJump, jRez+dJump);
-                    		 break; 
                     	 case 10:
                     		 g2d.drawLine(iRez, jRez+yJump, iRez+xJump, jRez+dJump);
                     		 g2d.drawLine(iRez+xJump, jRez, iRez+dJump, jRez+yJump);
                     		 break;
-                    	 case 11:
-                    		 g2d.drawLine(iRez+xJump, jRez, iRez+dJump, jRez+yJump);
-                    		 break;
-                    	 case 12:
-                    		 g2d.drawLine(iRez, jRez+yJump, iRez+dJump, jRez+yJump);
-                    		 break;
-                    	 case 13:
-                    		 g2d.drawLine(iRez+xJump, jRez+dJump, iRez+dJump, jRez+yJump);
-                    		 break; 
-                    	 case 14:
-                    		 g2d.drawLine(iRez, jRez+yJump, iRez+xJump, jRez+dJump);
-                    		 break; 
                     	 case 15:
                     		 break;
                     	 }                	 
