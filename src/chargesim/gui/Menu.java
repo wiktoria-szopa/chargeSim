@@ -15,6 +15,8 @@ public class Menu extends JMenuBar {
         void newItemChosen();
         void onSaveClicked();
         void onOpenClicked();
+        void equiShowChosen(boolean b);
+        void fieldForceShowChosen(boolean b);
     }
 
     //region fields
@@ -38,6 +40,13 @@ public class Menu extends JMenuBar {
     //przyciski w menu language
     JMenuItem polishItem = new JMenuItem("Polish");
     JMenuItem englishItem = new JMenuItem("English");
+    
+    //menu show
+    JMenu menuShow = new JMenu("Show");
+    
+    //przyciski w menu show
+    JCheckBoxMenuItem equiShowItem = new JCheckBoxMenuItem("Equipotential lines");
+    JCheckBoxMenuItem forceLineShowItem = new JCheckBoxMenuItem("Field force lines");
 
     //menu color
     JMenu menuColor = new JMenu("Colors");
@@ -63,12 +72,35 @@ public class Menu extends JMenuBar {
 
         add(menuAdd);
         menuAdd.add(chargeItem);
-        menuLanguage.add(polishItem);
-        menuLanguage.add(englishItem);
 
-        add(menuLanguage);
+        add(menuShow);
+        equiShowItem.setState(true);
+        forceLineShowItem.setState(true);
+        menuShow.add(equiShowItem);
+        menuShow.add(forceLineShowItem);
+        
+        equiShowItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				listener.equiShowChosen(equiShowItem.getState());
+				
+			}
+		});
+        
+        forceLineShowItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				listener.fieldForceShowChosen(forceLineShowItem.getState());
+				
+			}
+		});
 
         add(menuColor);
+        menuColor.add(backgroundColorItem);
+        menuColor.add(equipotentialColorItem);
+        menuColor.add(fieldForceColorItem);
 
         backgroundColorItem.addActionListener(new ActionListener() {
             @Override
@@ -96,6 +128,10 @@ public class Menu extends JMenuBar {
 			}
 		});
         
+        add(menuLanguage);
+        menuLanguage.add(polishItem);
+        menuLanguage.add(englishItem);
+        
         chargeItem.addActionListener(e -> listener.addChargeClicked());
         
         newItem.addActionListener(e -> listener.newItemChosen());
@@ -104,8 +140,6 @@ public class Menu extends JMenuBar {
 
         openItem.addActionListener(e -> listener.onOpenClicked());
 
-        menuColor.add(backgroundColorItem);
-        menuColor.add(equipotentialColorItem);
-        menuColor.add(fieldForceColorItem);
+
     }
 }

@@ -45,6 +45,9 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     private double maxEy = 0;
     private int iRezE;
     private int jRezE;
+    
+    private boolean equipotenttialFlag = true;
+    private boolean fieldForceFlag = true;
 
     private BufferedImage positiveImage;
     private BufferedImage negativeImage;
@@ -85,199 +88,203 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         
-        g2d.setColor(equipotentialColor);
-        int state = 0;
-        g2d.setStroke(new BasicStroke(2));
-        if(charges.size() != 0) {
-        	for (double step = 0.0; step <= maxPot; step += 0.5 + step) {
-            	calcBinTab(step);
-                for (int i = 0; i < binTabWidth-1; i++) {
-                    for (int j = 0; j < binTabWidth-1; j++) {
-                    	 iRez = i*rez;
-                    	 jRez = j*rez;
-                    	 xJump = setJump(potentialTab[iRez][jRez], potentialTab[iRez+1][jRez], potentialTab[iRez+2][jRez]);
-                    	 yJump = setJump(potentialTab[iRez][jRez], potentialTab[iRez][jRez+1], potentialTab[iRez][jRez+2]);
-                    	 state = getState(binTab[i][j], binTab[i+1][j], binTab[i+1][j+1], binTab[i][j+1]);
-                    	 switch (state) {
-                    	 case 1: case 14:             		 
-                    		 g2d.drawLine(iRez, jRez+yJump, iRez+xJump, jRez+dJump);
-                    		 break;
-                    	 case 2: case 13:
-                    		 g2d.drawLine(iRez+xJump, jRez+dJump, iRez+dJump, jRez+yJump);
-                    		 break;
-                    	 case 3: case 12:
-                    		 g2d.drawLine(iRez, jRez+yJump, iRez+dJump, jRez+yJump);
-                    		 break; 
-                    	 case 4: case 11:
-                    		 g2d.drawLine(iRez+xJump, jRez, iRez+dJump, jRez+yJump);
-                    		 break; 
-                    	 case 5:
-                    		 g2d.drawLine(iRez, jRez+yJump, iRez+xJump, jRez);
-                    		 g2d.drawLine(iRez+xJump, jRez+dJump, iRez+dJump, jRez+yJump);
-                    		 break;
-                    	 case 6: case 9:
-                    		 g2d.drawLine(iRez+xJump, jRez, iRez+xJump, jRez+dJump);
-                    		 break;
-                    	 case 7: case 8:
-                    		 g2d.drawLine(iRez, jRez+yJump, iRez+xJump, jRez);
-                    		 break;
-                    	 case 10:
-                    		 g2d.drawLine(iRez, jRez+yJump, iRez+xJump, jRez+dJump);
-                    		 g2d.drawLine(iRez+xJump, jRez, iRez+dJump, jRez+yJump);
-                    		 break;
-                    	 case 15:
-                    		 break;
-                    	 }                	 
-                    }           
-                }                  
-            }
-        }
-        g2d.setColor(Color.black);
-        
-        int stateE;
-        g2d.setStroke(new BasicStroke(3));
-        if(charges.size() != 0) {
-        	for (int i = 0; i < widthETab; i++) {
-                for (int j =0; j < widthETab; j++) {
-                	iRezE = i*rezE;
-                	jRezE = j*rezE;
-                	stateE = getEState(ExTab[i][j], EyTab[i][j], maxEx, maxEy);
-                	g2d.setColor(calcColor(ExTab[i][j], EyTab[i][j]));
-                	switch(stateE) {
-                	case 0:                		                		
-                		break;
-                	case 1:                		
-                		g2d.drawLine(iRezE+2, jRezE+10, iRezE+18, jRezE+10);
-                		break;
-                	case 2:
-                		if(EyTab[i][j]/ExTab[i][j] < 0) {
-                			g2d.drawLine(iRezE+2, jRezE+11, iRezE+18, jRezE+9);
-                		}
-                		else {
-                			g2d.drawLine(iRezE+2, jRezE+9, iRezE+18, jRezE+11);
-                		}
-                		break;
-                	case 3:
-                		if(EyTab[i][j]/ExTab[i][j] < 0) {
-                			g2d.drawLine(iRezE+2, jRezE+12, iRezE+18, jRezE+8);
-                		}
-                		else {
-                			g2d.drawLine(iRezE+2, jRezE+8, iRezE+18, jRezE+12);
-                		}
-                		break;
-                	case 4:                		
-                		if(EyTab[i][j]/ExTab[i][j] < 0) {
-                			g2d.drawLine(iRezE+2, jRezE+13, iRezE+18, jRezE+7);
-                		}
-                		else {
-                			g2d.drawLine(iRezE+2, jRezE+7, iRezE+18, jRezE+13);
-                		}
-                		break;
-                	case 5:                		
-                		if(EyTab[i][j]/ExTab[i][j] < 0) {
-                			g2d.drawLine(iRezE+2, jRezE+14, iRezE+18, jRezE+6);
-                		}
-                		else {
-                			g2d.drawLine(iRezE+2, jRezE+6, iRezE+18, jRezE+14);
-                		}
-                		break;
-                	case 6:                		
-                		if(EyTab[i][j]/ExTab[i][j] < 0) {
-                			g2d.drawLine(iRezE+2, jRezE+15, iRezE+18, jRezE+5);
-                		}
-                		else {
-                			g2d.drawLine(iRezE+2, jRezE+5, iRezE+18, jRezE+15);
-                		}
-                		break;
-                	case 7:               		
-                		if(EyTab[i][j]/ExTab[i][j] < 0) {
-                			g2d.drawLine(iRezE+2, jRezE+16, iRezE+18, jRezE+4);
-                		}
-                		else {
-                			g2d.drawLine(iRezE+2, jRezE+4, iRezE+18, jRezE+16);
-                		}
-                		break;
-                	case 8:
-                		if(EyTab[i][j]/ExTab[i][j] < 0) {
-                			g2d.drawLine(iRezE+2, jRezE+17, iRezE+18, jRezE+3);
-                		}
-                		else {
-                			g2d.drawLine(iRezE+2, jRezE+3, iRezE+18, jRezE+17);
-                		}
-                		break;
-                	case 9:               		
-                		if(EyTab[i][j]/ExTab[i][j] < 0) {
-                			g2d.drawLine(iRezE+2, jRezE+18, iRezE+18, jRezE+2);
-                		}
-                		else {
-                			g2d.drawLine(iRezE+2, jRezE+2, iRezE+18, jRezE+18);
-                		}
-                		break;
-                	case 10:               		
-                		if(EyTab[i][j]/ExTab[i][j] < 0) {
-                			g2d.drawLine(iRezE+3, jRezE+18, iRezE+17, jRezE+2);
-                		}
-                		else {
-                			g2d.drawLine(iRezE+3, jRezE+2, iRezE+17, jRezE+18);
-                		}
-                		break;
-                	case 11:                		
-                		if(EyTab[i][j]/ExTab[i][j] < 0) {
-                			g2d.drawLine(iRezE+4, jRezE+18, iRezE+16, jRezE+2);
-                		}
-                		else {
-                			g2d.drawLine(iRezE+4, jRezE+2, iRezE+16, jRezE+18);
-                		}
-                		break;
-                	case 12:
-                		if(EyTab[i][j]/ExTab[i][j] < 0) {
-                			g2d.drawLine(iRezE+5, jRezE+18, iRezE+15, jRezE+2);
-                		}
-                		else {
-                			g2d.drawLine(iRezE+5, jRezE+2, iRezE+15, jRezE+18);
-                		}
-                		break;
-                	case 13:               		
-                		if(EyTab[i][j]/ExTab[i][j] < 0) {
-                			g2d.drawLine(iRezE+6, jRezE+18, iRezE+14, jRezE+2);
-                		}
-                		else {
-                			g2d.drawLine(iRezE+6, jRezE+2, iRezE+14, jRezE+18);
-                		}
-                		break;
-                	case 14:               		
-                		if(EyTab[i][j]/ExTab[i][j] < 0) {
-                			g2d.drawLine(iRezE+7, jRezE+18, iRezE+13, jRezE+2);
-                		}
-                		else {
-                			g2d.drawLine(iRezE+7, jRezE+2, iRezE+13, jRezE+18);
-                		}
-                		break;
-                	case 15:                		
-                		if(EyTab[i][j]/ExTab[i][j] < 0) {
-                			g2d.drawLine(iRezE+8, jRezE+18, iRezE+12, jRezE+2);
-                		}
-                		else {
-                			g2d.drawLine(iRezE+8, jRezE+2, iRezE+12, jRezE+18);
-                		}
-                		break;
-                	case 16:                		
-                		if(EyTab[i][j]/ExTab[i][j] < 0) {
-                			g2d.drawLine(iRezE+9, jRezE+18, iRezE+11, jRezE+2);
-                		}
-                		else {
-                			g2d.drawLine(iRezE+9, jRezE+2, iRezE+11, jRezE+18);
-                		}
-                		break;
-                	case 17:               		
-                			g2d.drawLine(iRezE+10, jRezE+18, iRezE+10, jRezE+2);
-                		break;
-
-                	}
+        if(equipotenttialFlag) {
+        	g2d.setColor(equipotentialColor);
+            int state = 0;
+            g2d.setStroke(new BasicStroke(2));
+            if(charges.size() != 0) {
+            	for (double step = 0.0; step <= maxPot; step += 0.5 + step) {
+                	calcBinTab(step);
+                    for (int i = 0; i < binTabWidth-1; i++) {
+                        for (int j = 0; j < binTabWidth-1; j++) {
+                        	 iRez = i*rez;
+                        	 jRez = j*rez;
+                        	 xJump = setJump(potentialTab[iRez][jRez], potentialTab[iRez+1][jRez], potentialTab[iRez+2][jRez]);
+                        	 yJump = setJump(potentialTab[iRez][jRez], potentialTab[iRez][jRez+1], potentialTab[iRez][jRez+2]);
+                        	 state = getState(binTab[i][j], binTab[i+1][j], binTab[i+1][j+1], binTab[i][j+1]);
+                        	 switch (state) {
+                        	 case 1: case 14:             		 
+                        		 g2d.drawLine(iRez, jRez+yJump, iRez+xJump, jRez+dJump);
+                        		 break;
+                        	 case 2: case 13:
+                        		 g2d.drawLine(iRez+xJump, jRez+dJump, iRez+dJump, jRez+yJump);
+                        		 break;
+                        	 case 3: case 12:
+                        		 g2d.drawLine(iRez, jRez+yJump, iRez+dJump, jRez+yJump);
+                        		 break; 
+                        	 case 4: case 11:
+                        		 g2d.drawLine(iRez+xJump, jRez, iRez+dJump, jRez+yJump);
+                        		 break; 
+                        	 case 5:
+                        		 g2d.drawLine(iRez, jRez+yJump, iRez+xJump, jRez);
+                        		 g2d.drawLine(iRez+xJump, jRez+dJump, iRez+dJump, jRez+yJump);
+                        		 break;
+                        	 case 6: case 9:
+                        		 g2d.drawLine(iRez+xJump, jRez, iRez+xJump, jRez+dJump);
+                        		 break;
+                        	 case 7: case 8:
+                        		 g2d.drawLine(iRez, jRez+yJump, iRez+xJump, jRez);
+                        		 break;
+                        	 case 10:
+                        		 g2d.drawLine(iRez, jRez+yJump, iRez+xJump, jRez+dJump);
+                        		 g2d.drawLine(iRez+xJump, jRez, iRez+dJump, jRez+yJump);
+                        		 break;
+                        	 case 15:
+                        		 break;
+                        	 }                	 
+                        }           
+                    }                  
                 }
-        	}
+            }
+            g2d.setColor(Color.black);
         }
         
+        if(fieldForceFlag) {
+        	int stateE;
+            g2d.setStroke(new BasicStroke(3));
+            if(charges.size() != 0) {
+            	for (int i = 0; i < widthETab; i++) {
+                    for (int j =0; j < widthETab; j++) {
+                    	iRezE = i*rezE;
+                    	jRezE = j*rezE;
+                    	stateE = getEState(ExTab[i][j], EyTab[i][j], maxEx, maxEy);
+                    	g2d.setColor(calcColor(ExTab[i][j], EyTab[i][j]));
+                    	switch(stateE) {
+                    	case 0:                		                		
+                    		break;
+                    	case 1:                		
+                    		g2d.drawLine(iRezE+2, jRezE+10, iRezE+18, jRezE+10);
+                    		break;
+                    	case 2:
+                    		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                    			g2d.drawLine(iRezE+2, jRezE+11, iRezE+18, jRezE+9);
+                    		}
+                    		else {
+                    			g2d.drawLine(iRezE+2, jRezE+9, iRezE+18, jRezE+11);
+                    		}
+                    		break;
+                    	case 3:
+                    		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                    			g2d.drawLine(iRezE+2, jRezE+12, iRezE+18, jRezE+8);
+                    		}
+                    		else {
+                    			g2d.drawLine(iRezE+2, jRezE+8, iRezE+18, jRezE+12);
+                    		}
+                    		break;
+                    	case 4:                		
+                    		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                    			g2d.drawLine(iRezE+2, jRezE+13, iRezE+18, jRezE+7);
+                    		}
+                    		else {
+                    			g2d.drawLine(iRezE+2, jRezE+7, iRezE+18, jRezE+13);
+                    		}
+                    		break;
+                    	case 5:                		
+                    		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                    			g2d.drawLine(iRezE+2, jRezE+14, iRezE+18, jRezE+6);
+                    		}
+                    		else {
+                    			g2d.drawLine(iRezE+2, jRezE+6, iRezE+18, jRezE+14);
+                    		}
+                    		break;
+                    	case 6:                		
+                    		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                    			g2d.drawLine(iRezE+2, jRezE+15, iRezE+18, jRezE+5);
+                    		}
+                    		else {
+                    			g2d.drawLine(iRezE+2, jRezE+5, iRezE+18, jRezE+15);
+                    		}
+                    		break;
+                    	case 7:               		
+                    		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                    			g2d.drawLine(iRezE+2, jRezE+16, iRezE+18, jRezE+4);
+                    		}
+                    		else {
+                    			g2d.drawLine(iRezE+2, jRezE+4, iRezE+18, jRezE+16);
+                    		}
+                    		break;
+                    	case 8:
+                    		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                    			g2d.drawLine(iRezE+2, jRezE+17, iRezE+18, jRezE+3);
+                    		}
+                    		else {
+                    			g2d.drawLine(iRezE+2, jRezE+3, iRezE+18, jRezE+17);
+                    		}
+                    		break;
+                    	case 9:               		
+                    		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                    			g2d.drawLine(iRezE+2, jRezE+18, iRezE+18, jRezE+2);
+                    		}
+                    		else {
+                    			g2d.drawLine(iRezE+2, jRezE+2, iRezE+18, jRezE+18);
+                    		}
+                    		break;
+                    	case 10:               		
+                    		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                    			g2d.drawLine(iRezE+3, jRezE+18, iRezE+17, jRezE+2);
+                    		}
+                    		else {
+                    			g2d.drawLine(iRezE+3, jRezE+2, iRezE+17, jRezE+18);
+                    		}
+                    		break;
+                    	case 11:                		
+                    		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                    			g2d.drawLine(iRezE+4, jRezE+18, iRezE+16, jRezE+2);
+                    		}
+                    		else {
+                    			g2d.drawLine(iRezE+4, jRezE+2, iRezE+16, jRezE+18);
+                    		}
+                    		break;
+                    	case 12:
+                    		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                    			g2d.drawLine(iRezE+5, jRezE+18, iRezE+15, jRezE+2);
+                    		}
+                    		else {
+                    			g2d.drawLine(iRezE+5, jRezE+2, iRezE+15, jRezE+18);
+                    		}
+                    		break;
+                    	case 13:               		
+                    		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                    			g2d.drawLine(iRezE+6, jRezE+18, iRezE+14, jRezE+2);
+                    		}
+                    		else {
+                    			g2d.drawLine(iRezE+6, jRezE+2, iRezE+14, jRezE+18);
+                    		}
+                    		break;
+                    	case 14:               		
+                    		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                    			g2d.drawLine(iRezE+7, jRezE+18, iRezE+13, jRezE+2);
+                    		}
+                    		else {
+                    			g2d.drawLine(iRezE+7, jRezE+2, iRezE+13, jRezE+18);
+                    		}
+                    		break;
+                    	case 15:                		
+                    		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                    			g2d.drawLine(iRezE+8, jRezE+18, iRezE+12, jRezE+2);
+                    		}
+                    		else {
+                    			g2d.drawLine(iRezE+8, jRezE+2, iRezE+12, jRezE+18);
+                    		}
+                    		break;
+                    	case 16:                		
+                    		if(EyTab[i][j]/ExTab[i][j] < 0) {
+                    			g2d.drawLine(iRezE+9, jRezE+18, iRezE+11, jRezE+2);
+                    		}
+                    		else {
+                    			g2d.drawLine(iRezE+9, jRezE+2, iRezE+11, jRezE+18);
+                    		}
+                    		break;
+                    	case 17:               		
+                    			g2d.drawLine(iRezE+10, jRezE+18, iRezE+10, jRezE+2);
+                    		break;
+
+                    	}
+                    }
+            	}
+            }
+            g2d.setColor(Color.black);
+        }
         
 
         for (Charge charge : charges) {
@@ -815,6 +822,27 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         this.charges = charges;
         repaint();
     }
+
+	public boolean isEquipotenttialFlag() {
+		return equipotenttialFlag;
+	}
+
+	public void setEquipotenttialFlag(boolean equipotenttialFlag) {
+		this.equipotenttialFlag = equipotenttialFlag;
+		this.repaint();
+	}
+
+	public boolean isFieldForceFlag() {
+		return fieldForceFlag;
+	}
+
+	public void setFieldForceFlag(boolean fieldForceFlag) {
+		this.fieldForceFlag = fieldForceFlag;
+		this.repaint();
+	}
+    
+    
+    
     //enndregion get/set
 
 }

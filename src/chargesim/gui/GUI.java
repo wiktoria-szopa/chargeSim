@@ -120,6 +120,14 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     public void addChargeClicked() {
         panelCenter.addCharge();
     }
+    
+    public void equiShowChosen(boolean b) {
+    	panelCenter.setEquipotenttialFlag(b);
+    }
+    
+    public void fieldForceShowChosen(boolean b) {
+    	panelCenter.setFieldForceFlag(b);
+    }
     //endregion menu listner
 
     //region centerpanel listener
