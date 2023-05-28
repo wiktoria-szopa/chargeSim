@@ -809,9 +809,6 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         zeroPotTab();       
         zeroETab();      
         this.repaint();
-        System.out.println(ExTab[20][20]);
-        System.out.println(EyTab[20][20]);
-        System.out.println(potentialTab[20][20]);
     }
 
     public List<Charge> getCharges() {
