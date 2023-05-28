@@ -9,6 +9,7 @@ public class Menu extends JMenuBar {
 
     public interface Listener {   
         void backgroundColorChosen(Color color);
+        void forceLineColorChosen(Color color);
         void equipotentialColorChosen(Color color);
         void addChargeClicked();
         void newItemChosen();
@@ -83,6 +84,15 @@ public class Menu extends JMenuBar {
 			public void actionPerformed(ActionEvent e) {
 				Color isolineColor = JColorChooser.showDialog(null, "Pick a isoline color", Color.BLACK);
                 listener.equipotentialColorChosen(isolineColor);
+			}
+		});
+        
+        fieldForceColorItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Color forceLineColor = JColorChooser.showDialog(null, "Pick a pick force line color", Color.BLACK);
+				listener.forceLineColorChosen(forceLineColor);
 			}
 		});
         

@@ -38,6 +38,7 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
         panelCenter.clearChargesArray();
         panelCenter.setBackground(Color.white);
         panelCenter.setEquipotentialColor(Color.black);
+        panelCenter.setForceLineColor(Color.black);
     }
 
     @Override
@@ -91,6 +92,8 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
                 reader.close();
                 panelCenter.setCharges(charges);
                 panelCenter.calculatePotTab();
+                panelCenter.calculateExTab();
+                panelCenter.calculateEyTab();
                 panelCenter.repaint();
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this,
@@ -103,6 +106,10 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
 
     public void equipotentialColorChosen(Color color) {
         panelCenter.setEquipotentialColor(color);
+    }
+    
+    public void forceLineColorChosen(Color color) {
+    	panelCenter.setForceLineColor(color);
     }
 
     public void backgroundColorChosen(Color color) {
