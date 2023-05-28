@@ -326,10 +326,15 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         x = e.getX();
         y = e.getY();
         if (SwingUtilities.isRightMouseButton(e)) {
+            boolean chargeClicked = false;
             for (Charge charge : charges) {
                 if (calculateDistance(x, y, charge.getX(), charge.getY()) < CHARGE_RADIUS) {
                     showChargeMenu(x, y, charge);
+                    chargeClicked = true;
                 }
+            }
+            if(!chargeClicked){
+                showNotChargeMenu(x,y);
             }
         }
     }
@@ -682,6 +687,15 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         repaint();
     }
 
+    public void addChargeHere(double x, double y) {
+        Charge charge = new Charge(x,y, 5);
+        charges.add(charge);
+        calculatePotTab();
+        calculateExTab();
+        calculateEyTab();
+        repaint();
+    }
+
     private void showChargeMenu(double x, double y, Charge charge) {
         double initialChargeValue = charge.getValue();
         JPopupMenu chargeMenu = new JPopupMenu();
@@ -783,6 +797,20 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         });
 
     }
+
+    private void showNotChargeMenu(double x, double y) {
+        JPopupMenu notChargeMenu = new JPopupMenu();
+        JMenuItem addChargeHereItem = new JMenuItem("Add charge here");
+        notChargeMenu.add(addChargeHereItem);
+        notChargeMenu.show(this, (int) x, (int) y);
+
+        addChargeHereItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addChargeHere(x,y);
+            }
+        });
+    };
 
     //region get/set
     public Color getEquipotentialColor() {
