@@ -5,6 +5,8 @@ import chargesim.Charge;
 
 import java.awt.event.*;
 import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
@@ -107,9 +109,9 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     public void equipotentialColorChosen(Color color) {
         panelCenter.setEquipotentialColor(color);
     }
-    
+
     public void forceLineColorChosen(Color color) {
-    	panelCenter.setForceLineColor(color);
+        panelCenter.setForceLineColor(color);
     }
 
     public void backgroundColorChosen(Color color) {
@@ -120,13 +122,73 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     public void addChargeClicked() {
         panelCenter.addCharge();
     }
-    
-    public void equiShowChosen(boolean b) {
-    	panelCenter.setEquipotenttialFlag(b);
+
+    @Override
+    public void addDipoleClicked() throws URISyntaxException {
+        java.util.List<Charge> charges = new ArrayList<>();
+        URL dipole = getClass().getResource("/chargesim/dipole.cs");
+
+        assert dipole != null;
+        File fileIn = new File(dipole.toURI());
+        try {
+
+            BufferedReader reader = new BufferedReader(new FileReader(fileIn));
+            String line = reader.readLine();
+            while (line != null) {
+                charges.add(stringToCharge(line));
+                line = reader.readLine();
+            }
+            reader.close();
+            panelCenter.setCharges(charges);
+            panelCenter.calculatePotTab();
+            panelCenter.calculateExTab();
+            panelCenter.calculateEyTab();
+            panelCenter.repaint();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Failed to open",
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
-    
+
+
+    @Override
+    public void addQuadrupoleClicked() throws URISyntaxException {
+        java.util.List<Charge> charges = new ArrayList<>();
+        URL dipole = getClass().getResource("/chargesim/quadrupole.cs");
+
+        assert dipole != null;
+        File fileIn = new File(dipole.toURI());
+        try {
+
+            BufferedReader reader = new BufferedReader(new FileReader(fileIn));
+            String line = reader.readLine();
+            while (line != null) {
+                charges.add(stringToCharge(line));
+                line = reader.readLine();
+            }
+            reader.close();
+            panelCenter.setCharges(charges);
+            panelCenter.calculatePotTab();
+            panelCenter.calculateExTab();
+            panelCenter.calculateEyTab();
+            panelCenter.repaint();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Failed to open",
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+
+    public void equiShowChosen(boolean b) {
+        panelCenter.setEquipotenttialFlag(b);
+    }
+
     public void fieldForceShowChosen(boolean b) {
-    	panelCenter.setFieldForceFlag(b);
+        panelCenter.setFieldForceFlag(b);
     }
     //endregion menu listner
 
@@ -141,31 +203,31 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     public void potentialChange(double v) {
         panelDown.renderPotential(v);
     }
-    
+
     public void setPotential() {
-    	panelDown.setPotential();
+        panelDown.setPotential();
     }
-    
+
     public void EChange(double ex, double ey) {
-    	panelDown.renderE(ex, ey);
+        panelDown.renderE(ex, ey);
     }
-    
+
     public void setE() {
-    	panelDown.setE();
+        panelDown.setE();
     }
-    
+
     //endregion centerpanel listener
 
     private String chargeToString(Charge charge) {
-        return String.format(Locale.US,"%f\t%f\t%f", charge.getX(), charge.getY(), charge.getValue());
+        return String.format(Locale.US, "%f\t%f\t%f", charge.getX(), charge.getY(), charge.getValue());
     }
 
-    private Charge stringToCharge(String line){
-        String [] tmp = line.split("\t");
+    private Charge stringToCharge(String line) {
+        String[] tmp = line.split("\t");
         double x = Double.parseDouble(tmp[0]);
         double y = Double.parseDouble(tmp[1]);
         double q = Double.parseDouble(tmp[2]);
 
-        return new Charge(x,y,q);
+        return new Charge(x, y, q);
     }
 }
