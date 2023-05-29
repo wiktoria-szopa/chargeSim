@@ -382,17 +382,19 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         }
         x = e.getX();
         y = e.getY();
-        movingCharge.setX(x);
-        movingCharge.setY(y);        
-        x = x / 100;
-        y = y / 100;
-        listener.cursorMoved(x, y);
-        listener.setPotential();
-        listener.setE();        
-        calculatePotTab();
-        calculateExTab();
-        calculateEyTab();
-        repaint();
+        if(x> 20 && x<763 && y > 20 && y < 691 ){
+			movingCharge.setX(x);
+			movingCharge.setY(y);
+			x = x / 100;
+			y = y / 100;
+			listener.cursorMoved(x, y);
+			listener.setPotential();
+			listener.setE();
+			calculatePotTab();
+			calculateExTab();
+			calculateEyTab();
+			repaint();
+		}
         
     }
     //endregion mouse listeners    
