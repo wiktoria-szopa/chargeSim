@@ -3,17 +3,14 @@ package chargesim.gui;
 
 import chargesim.Charge;
 
-import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     //panele
@@ -74,6 +71,7 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
 
     @Override
     public void onOpenClicked() {
+        int i = 0;
         java.util.List<Charge> charges = new ArrayList<>();
         JFileChooser openFileChooser = new JFileChooser();
         openFileChooser.setApproveButtonText("Open");
@@ -88,8 +86,13 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
                 BufferedReader reader = new BufferedReader(new FileReader(fileIn));
                 String line = reader.readLine();
                 while (line != null) {
-                    charges.add(stringToCharge(line));
-                    line = reader.readLine();
+                    i++;
+                    if(i<11){
+                        charges.add(stringToCharge(line));
+                        line = reader.readLine();
+                    } else {
+                        throw new TooManyChargesException();
+                    }
                 }
                 reader.close();
                 panelCenter.setCharges(charges);
@@ -102,7 +105,13 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
                         "Failed to open: " + openFileChooser.getSelectedFile().getAbsolutePath(),
                         "ERROR",
                         JOptionPane.ERROR_MESSAGE);
+            } catch(TooManyChargesException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Failed to open because of too many charges: " + openFileChooser.getSelectedFile().getAbsolutePath(),
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
             }
+
         }
     }
 
