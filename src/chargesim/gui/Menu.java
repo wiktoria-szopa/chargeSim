@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URISyntaxException;
 
 public class Menu extends JMenuBar {
 
@@ -12,6 +13,8 @@ public class Menu extends JMenuBar {
         void forceLineColorChosen(Color color);
         void equipotentialColorChosen(Color color);
         void addChargeClicked();
+        void addDipoleClicked() throws URISyntaxException;
+        void addQuadrupoleClicked() throws URISyntaxException;
         void newItemChosen();
         void onSaveClicked();
         void onOpenClicked();
@@ -33,6 +36,8 @@ public class Menu extends JMenuBar {
 
     //przyciski w menu dodaj
     JMenuItem chargeItem = new JMenuItem("Charge");
+    JMenuItem dipoleItem = new JMenuItem("Dipole");
+    JMenuItem quadrupoleItem = new JMenuItem("Quadrupole");
 
     //menu language
     JMenu menuLanguage = new JMenu("Language");
@@ -72,6 +77,8 @@ public class Menu extends JMenuBar {
 
         add(menuAdd);
         menuAdd.add(chargeItem);
+        menuAdd.add(dipoleItem);
+        menuAdd.add(quadrupoleItem);
 
         add(menuShow);
         equiShowItem.setState(true);
@@ -139,6 +146,22 @@ public class Menu extends JMenuBar {
         saveItem.addActionListener(e -> listener.onSaveClicked());
 
         openItem.addActionListener(e -> listener.onOpenClicked());
+
+        dipoleItem.addActionListener(e-> {
+            try {
+                listener.addDipoleClicked();
+            } catch (URISyntaxException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        quadrupoleItem.addActionListener(e-> {
+            try {
+                listener.addQuadrupoleClicked();
+            } catch (URISyntaxException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
 
     }
