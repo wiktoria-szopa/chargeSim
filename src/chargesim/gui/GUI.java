@@ -3,17 +3,14 @@ package chargesim.gui;
 
 import chargesim.Charge;
 
-import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     //panele

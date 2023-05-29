@@ -1,7 +1,5 @@
 package chargesim.gui;
 
-import java.awt.Color;
-
 import javax.swing.*;
 
 public class BottomPanel extends JPanel {

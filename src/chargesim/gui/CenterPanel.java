@@ -6,15 +6,13 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class CenterPanel extends JPanel implements MouseListener, MouseMotionListener {
 

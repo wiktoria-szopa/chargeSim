@@ -1,7 +1,5 @@
 package chargesim;
 
-import javax.swing.*;
-
 public class Charge {
     private double value;
     private double x;
