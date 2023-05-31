@@ -20,6 +20,8 @@ public class Menu extends JMenuBar {
         void onOpenClicked();
         void equiShowChosen(boolean b);
         void fieldForceShowChosen(boolean b);
+
+        void onPngSaveClicked();
     }
 
     //region fields
@@ -167,12 +169,7 @@ public class Menu extends JMenuBar {
             }
         });
 
-        saveAsPngItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
+        saveAsPngItem.addActionListener(e -> listener.onPngSaveClicked());
 
 
     }
