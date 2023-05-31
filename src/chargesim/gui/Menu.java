@@ -27,7 +27,9 @@ public class Menu extends JMenuBar {
     JMenu menu = new JMenu("Menu");
 
     //przyciski w menu glownym
-    JMenuItem saveItem = new JMenuItem("Save");
+    JMenu saveMenu = new JMenu("Save");
+    JMenuItem saveAsPngItem = new JMenuItem("as png");
+    JMenuItem saveItem = new JMenuItem("as charge sim file");
     JMenuItem openItem = new JMenuItem("Open");
     JMenuItem newItem = new JMenuItem("New");
 
@@ -71,7 +73,9 @@ public class Menu extends JMenuBar {
         super();
         add(menu);
 
-        menu.add(saveItem);
+        menu.add(saveMenu);
+        saveMenu.add(saveItem);
+        saveMenu.add(saveAsPngItem);
         menu.add(openItem);
         menu.add(newItem);
 
@@ -160,6 +164,13 @@ public class Menu extends JMenuBar {
                 listener.addQuadrupoleClicked();
             } catch (URISyntaxException ex) {
                 throw new RuntimeException(ex);
+            }
+        });
+
+        saveAsPngItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
             }
         });
 
