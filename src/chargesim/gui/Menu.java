@@ -20,6 +20,8 @@ public class Menu extends JMenuBar {
         void onOpenClicked();
         void equiShowChosen(boolean b);
         void fieldForceShowChosen(boolean b);
+
+        void onPngSaveClicked();
     }
 
     //region fields
@@ -27,7 +29,9 @@ public class Menu extends JMenuBar {
     JMenu menu = new JMenu("Menu");
 
     //przyciski w menu glownym
-    JMenuItem saveItem = new JMenuItem("Save");
+    JMenu saveMenu = new JMenu("Save");
+    JMenuItem saveAsPngItem = new JMenuItem("as png");
+    JMenuItem saveItem = new JMenuItem("as charge sim file");
     JMenuItem openItem = new JMenuItem("Open");
     JMenuItem newItem = new JMenuItem("New");
 
@@ -71,7 +75,9 @@ public class Menu extends JMenuBar {
         super();
         add(menu);
 
-        menu.add(saveItem);
+        menu.add(saveMenu);
+        saveMenu.add(saveItem);
+        saveMenu.add(saveAsPngItem);
         menu.add(openItem);
         menu.add(newItem);
 
@@ -162,6 +168,8 @@ public class Menu extends JMenuBar {
                 throw new RuntimeException(ex);
             }
         });
+
+        saveAsPngItem.addActionListener(e -> listener.onPngSaveClicked());
 
 
     }

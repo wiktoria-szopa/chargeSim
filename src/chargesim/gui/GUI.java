@@ -3,9 +3,11 @@ package chargesim.gui;
 
 import chargesim.Charge;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -87,7 +89,7 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
                 String line = reader.readLine();
                 while (line != null) {
                     i++;
-                    if(i<11){
+                    if (i < 11) {
                         charges.add(stringToCharge(line));
                         line = reader.readLine();
                     } else {
@@ -105,7 +107,7 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
                         "Failed to open: " + openFileChooser.getSelectedFile().getAbsolutePath(),
                         "ERROR",
                         JOptionPane.ERROR_MESSAGE);
-            } catch(TooManyChargesException e) {
+            } catch (TooManyChargesException e) {
                 JOptionPane.showMessageDialog(this,
                         "Failed to open because of too many charges: " + openFileChooser.getSelectedFile().getAbsolutePath(),
                         "ERROR",
@@ -198,6 +200,31 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
 
     public void fieldForceShowChosen(boolean b) {
         panelCenter.setFieldForceFlag(b);
+    }
+
+    @Override
+    public void onPngSaveClicked() {
+        JFileChooser saveFileChooser = new JFileChooser();
+        saveFileChooser.setApproveButtonText("Save");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "png", "png");
+        saveFileChooser.setFileFilter(filter);
+        int returnVal = saveFileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File fileOut = new File(saveFileChooser.getSelectedFile() + ".png");
+            try {
+                BufferedImage image = new BufferedImage(panelCenter.getWidth(), panelCenter.getHeight(), BufferedImage.TYPE_INT_RGB);
+                Graphics2D canvas = image.createGraphics();
+                panelCenter.paintAll(canvas);
+                ImageIO.write(image, "png", fileOut);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Failed to save into a file",
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
     }
     //endregion menu listner
 
