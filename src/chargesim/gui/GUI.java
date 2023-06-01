@@ -90,7 +90,11 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
                 while (line != null) {
                     i++;
                     if (i < 11) {
-                        charges.add(stringToCharge(line));
+                        Charge charge = stringToCharge(line);
+                        if(charge.getX() < 0 || charge.getX() > 783 || charge.getY() < 0 || charge.getY() > 711 ){
+                            throw new InvalidChargeException();
+                        }
+                        charges.add(charge);
                         line = reader.readLine();
                     } else {
                         throw new TooManyChargesException();
@@ -110,6 +114,11 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
             } catch (TooManyChargesException e) {
                 JOptionPane.showMessageDialog(this,
                         "Failed to open because of too many charges: " + openFileChooser.getSelectedFile().getAbsolutePath(),
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (InvalidChargeException e){
+                JOptionPane.showMessageDialog(this,
+                        "Failed to open because of invalid charge coordinates: " + openFileChooser.getSelectedFile().getAbsolutePath(),
                         "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             }
