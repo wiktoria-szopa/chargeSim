@@ -1,12 +1,19 @@
 package chargesim.gui;
 
+import javax.print.attribute.standard.MediaSize.Engineering;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URISyntaxException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Menu extends JMenuBar {
+	
+	Locale loc = new Locale("en", "EN");
+	ResourceBundle rB = ResourceBundle.getBundle("chargesim.gui.Bundle", loc);
+	
 
     public interface Listener {   
         void backgroundColorChosen(Color color);
@@ -20,8 +27,9 @@ public class Menu extends JMenuBar {
         void onOpenClicked();
         void equiShowChosen(boolean b);
         void fieldForceShowChosen(boolean b);
-
         void onPngSaveClicked();
+        void polishItemClicked();
+        void englishItemClicked();
     }
 
     //region fields
@@ -51,7 +59,7 @@ public class Menu extends JMenuBar {
     JMenuItem englishItem = new JMenuItem("English");
     
     //menu show
-    JMenu menuShow = new JMenu("Show");
+    JMenu menuShow = new JMenu("View");
     
     //przyciski w menu show
     JCheckBoxMenuItem equiShowItem = new JCheckBoxMenuItem("Equipotential lines");
@@ -74,7 +82,7 @@ public class Menu extends JMenuBar {
     public Menu() {
         super();
         add(menu);
-
+        
         menu.add(saveMenu);
         saveMenu.add(saveItem);
         saveMenu.add(saveAsPngItem);
@@ -144,6 +152,72 @@ public class Menu extends JMenuBar {
         add(menuLanguage);
         menuLanguage.add(polishItem);
         menuLanguage.add(englishItem);
+        
+      
+        polishItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {				
+				saveMenu.setText("Zapisz");
+				saveAsPngItem.setText("jako png");
+				saveItem.setText("jako charge sim file");
+				newItem.setText("Nowy");
+				openItem.setText("Otwórz");
+				
+				menuAdd.setText("Dodaj");
+				chargeItem.setText("Ładunek");
+				dipoleItem.setText("Dipol");
+				quadrupoleItem.setText("Kwadrupol");
+				
+				menuLanguage.setText("Język");
+				polishItem.setText("Polski");
+				englishItem.setText("Angielski");
+				
+				menuShow.setText("Widok");
+				equiShowItem.setText("Linie ekwipotencjalne");
+				forceLineShowItem.setText("Linie sił pola");
+				
+				menuColor.setText("Kolory");
+				backgroundColorItem.setText("Tło");
+				equipotentialColorItem.setText("Linie ekwipotencjalne");
+				fieldForceColorItem.setText("Linie sił pola");
+				
+				listener.polishItemClicked();
+			}
+		});
+        
+        englishItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				saveMenu.setText("Save");
+				saveAsPngItem.setText("as png");
+				saveItem.setText("as charge sim file");
+				newItem.setText("New");
+				openItem.setText("Open");
+				
+				menuAdd.setText("Add");
+				chargeItem.setText("Charge");
+				dipoleItem.setText("Dipole");
+				quadrupoleItem.setText("Quadrupole");
+				
+				menuLanguage.setText("Language");
+				polishItem.setText("Polish");
+				englishItem.setText("English");
+				
+				menuShow.setText("View");
+				equiShowItem.setText("Equipotential lines");
+				forceLineShowItem.setText("Field force lines");
+				
+				menuColor.setText("Colors");
+				backgroundColorItem.setText("Background");
+				equipotentialColorItem.setText("Equipotential lines");
+				fieldForceColorItem.setText("Field force lines");
+				
+				listener.englishItemClicked();
+			}
+		});
+        
         
         chargeItem.addActionListener(e -> listener.addChargeClicked());
         

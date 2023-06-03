@@ -2,6 +2,8 @@ package chargesim;
 
 import chargesim.gui.GUI;
 
+import java.util.Locale;
+
 import javax.swing.*;
 
 public class Main {

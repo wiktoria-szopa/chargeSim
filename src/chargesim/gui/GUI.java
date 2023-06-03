@@ -12,6 +12,7 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Locale;
 
 public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
@@ -19,8 +20,18 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     CenterPanel panelCenter = new CenterPanel();
     BottomPanel panelDown = new BottomPanel();
     Menu menuBar = new Menu();
+    
+    private String sSave = "Save";
+    private String sOpen = "Open";
+    private String sCancel = "Cancel";
+    private String sError = "Error";
+    private String sFailedToSave = "Failed to save into a file";
+    private String sFailedToOpen = "Failed to open: ";
+    private String sFailedToOpenTooMany = "Failed to open because of too many charges: ";
+    private String sFailedToOpenInvalid = "Failed to open because of invalid charge coordinates: ";
 
-    public GUI() {
+
+    public GUI() {    	
         this.setSize(800, 800);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -47,7 +58,8 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
         java.util.List<Charge> charges = panelCenter.getCharges();
 
         JFileChooser saveFileChooser = new JFileChooser();
-        saveFileChooser.setApproveButtonText("Save");
+        saveFileChooser.setDialogTitle(sSave);
+        saveFileChooser.setApproveButtonText(sSave);
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "charge sim files", "cs");
         saveFileChooser.setFileFilter(filter);
@@ -63,8 +75,8 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
                 fileOutWriter.close();
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this,
-                        "Failed to save into a file",
-                        "ERROR",
+                        sFailedToSave,
+                        sError,
                         JOptionPane.ERROR_MESSAGE);
             }
 
@@ -76,7 +88,8 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
         int i = 0;
         java.util.List<Charge> charges = new ArrayList<>();
         JFileChooser openFileChooser = new JFileChooser();
-        openFileChooser.setApproveButtonText("Open");
+        openFileChooser.setDialogTitle(sOpen);
+        openFileChooser.setApproveButtonText(sOpen);
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "charge sim files", "cs");
         openFileChooser.setFileFilter(filter);
@@ -107,18 +120,18 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
                 panelCenter.repaint();
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this,
-                        "Failed to open: " + openFileChooser.getSelectedFile().getAbsolutePath(),
-                        "ERROR",
+                        sFailedToOpen + openFileChooser.getSelectedFile().getAbsolutePath(),
+                        sError,
                         JOptionPane.ERROR_MESSAGE);
             } catch (TooManyChargesException e) {
                 JOptionPane.showMessageDialog(this,
-                        "Failed to open because of too many charges: " + openFileChooser.getSelectedFile().getAbsolutePath(),
-                        "ERROR",
+                        sFailedToOpenTooMany + openFileChooser.getSelectedFile().getAbsolutePath(),
+                        sError,
                         JOptionPane.ERROR_MESSAGE);
             } catch (InvalidChargeException e){
                 JOptionPane.showMessageDialog(this,
-                        "Failed to open because of invalid charge coordinates: " + openFileChooser.getSelectedFile().getAbsolutePath(),
-                        "ERROR",
+                		sFailedToOpenInvalid + openFileChooser.getSelectedFile().getAbsolutePath(),
+                        sError,
                         JOptionPane.ERROR_MESSAGE);
             }
 
@@ -165,8 +178,8 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
             panelCenter.repaint();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this,
-                    "Failed to open",
-                    "ERROR",
+                    sFailedToOpen,
+                    sError,
                     JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -195,8 +208,8 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
             panelCenter.repaint();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this,
-                    "Failed to open",
-                    "ERROR",
+            		sFailedToOpen,
+                    sError,
                     JOptionPane.ERROR_MESSAGE);
         }
 
@@ -213,7 +226,8 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     @Override
     public void onPngSaveClicked() {
         JFileChooser saveFileChooser = new JFileChooser();
-        saveFileChooser.setApproveButtonText("Save");
+        saveFileChooser.setDialogTitle(sSave);
+        saveFileChooser.setApproveButtonText(sSave);
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "png", "png");
         saveFileChooser.setFileFilter(filter);
@@ -227,12 +241,47 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
                 ImageIO.write(image, "png", fileOut);
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this,
-                        "Failed to save into a file",
-                        "ERROR",
+                		sFailedToSave,
+                        sError,
                         JOptionPane.ERROR_MESSAGE);
             }
 
         }
+    }
+    
+    public void polishItemClicked() {
+    	panelCenter.setPolishtext();
+        sSave = "Zapisz";
+        sOpen = "Otwórz";
+        sError = "Błąd";
+        sFailedToSave = "Nie udało sie zapisać do pliku";
+        sFailedToOpen = "Nie udało się otworzyć: ";
+        sFailedToOpenTooMany = "Za duża ilość ładunków! Nie udało się otworzyć pliku: ";
+        sFailedToOpenInvalid = "Niewłaściwe parametry ładunków! Nie udało się otworzyć pliku: ";
+        UIManager.put("FileChooser.cancelButtonText", "Anuluj");
+        UIManager.put("FileChooser.filesOfTypeLabelText", "Format pliku: ");
+        UIManager.put("FileChooser.fileNameLabelText", "Nazwa pliku: ");
+        UIManager.put("FileChooser.acceptAllFileFilterText", "Wszystkie pliki");
+        UIManager.put("FileChooser.fileNameHeaderText", "Nazwa");
+        UIManager.put("FileChooser.fileDateHeaderText", "Data modyfikacji");
+    }
+    
+    public void englishItemClicked() {
+    	panelCenter.setEnglishText();
+        sSave = "Save";
+        sOpen = "Open";
+        sCancel = "Cancel";
+        sError = "Error";
+        sFailedToSave = "Failed to save into a file";
+        sFailedToOpen = "Failed to open: ";
+        sFailedToOpenTooMany = "Failed to open because of too many charges: ";
+        sFailedToOpenInvalid = "Failed to open because of invalid charge coordinates: ";
+        UIManager.put("FileChooser.cancelButtonText", "Cancel");
+        UIManager.put("FileChooser.filesOfTypeLabelText", "File Format: ");
+        UIManager.put("FileChooser.fileNameLabelText", "File name: ");
+        UIManager.put("FileChooser.acceptAllFileFilterText", "All files");
+        UIManager.put("FileChooser.fileNameHeaderText", "Name");
+        UIManager.put("FileChooser.fileDateHeaderText", "Date Modified");
     }
     //endregion menu listner
 
@@ -274,4 +323,5 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
 
         return new Charge(x, y, q);
     }
+
 }

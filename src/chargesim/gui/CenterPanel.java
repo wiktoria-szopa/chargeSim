@@ -52,6 +52,15 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
 
     private Color equipotentialColor = Color.black;
     private Color forceLineColor = Color.black;
+    
+    private String sEdit = "Edit";
+    private String sCopy = "Copy";
+    private String sDelete = "Delete";
+    private String sCancel = "Cancel";
+    private String sChargeValueLabel = "Set charge value:";
+    private String sAddChargeHereItem = "Add charge here";
+    private String sError = "Error";
+    private String sTooMany = "Too many charges on the board!";
 
     public interface Listener {
         void cursorMoved(double x, double y);
@@ -669,8 +678,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     public void addCharge() {
         if (charges.size() >= 10) {
             JOptionPane.showMessageDialog(this,
-                    "Too many charges on the board",
-                    "ERROR",
+                    sTooMany,
+                    sError,
                     JOptionPane.ERROR_MESSAGE);
         } else {
             Charge charge = new Charge(this.getWidth() / 2, this.getHeight() / 2, 5);
@@ -685,8 +694,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     public void addChargeHere(double x, double y) {
         if (charges.size()>=10) {
             JOptionPane.showMessageDialog(this,
-                    "Too many charges on the board",
-                    "ERROR",
+            		sTooMany,
+                    sError,
                     JOptionPane.ERROR_MESSAGE);
 
         } else {
@@ -738,8 +747,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     	}
     	else {
     		JOptionPane.showMessageDialog(this,
-                    "Too many charges on the board",
-                    "ERROR",
+    				sTooMany,
+                    sError,
                     JOptionPane.ERROR_MESSAGE);
     	}
     	
@@ -769,12 +778,15 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     //enndregion get/set
 
     //region ChargeMenu
+
+    //JLabel chargeValueLabel = new JLabel("Set charge value:");
+    
     private void showChargeMenu(double x, double y, Charge charge) {
         double initialChargeValue = charge.getValue();
         JPopupMenu chargeMenu = new JPopupMenu();
-        JMenuItem editItem = new JMenuItem("Edit");
-        JMenuItem copyItem = new JMenuItem("Copy");
-        JMenuItem deleteItem = new JMenuItem("Delete");
+        JMenuItem editItem = new JMenuItem(sEdit);
+        JMenuItem copyItem = new JMenuItem(sCopy);
+        JMenuItem deleteItem = new JMenuItem(sDelete);
 
         chargeMenu.add(copyItem);
         chargeMenu.add(deleteItem);
@@ -807,7 +819,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
             }
         });
 
-        JLabel chargeValueLabel = new JLabel("Set charge value:");
+        JLabel chargeValueLabel = new JLabel(sChargeValueLabel);
 
         JButton okButton = new JButton("OK");
         okButton.addActionListener(new ActionListener() {
@@ -816,7 +828,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
                 editMenuFrame.dispose();
             }
         });
-        JButton cancelButton = new JButton("Cancel");
+        JButton cancelButton = new JButton(sCancel);
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -861,8 +873,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
             public void actionPerformed(ActionEvent e) {
                 if (charges.size() >= 10) {
                     JOptionPane.showMessageDialog(CenterPanel.this,
-                            "Too many charges on the board",
-                            "ERROR",
+                    		sTooMany,
+                            sError,
                             JOptionPane.ERROR_MESSAGE);
 
                 } else {
@@ -878,10 +890,10 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         });
 
     }
-
+    
     private void showNotChargeMenu(double x, double y) {
-        JPopupMenu notChargeMenu = new JPopupMenu();
-        JMenuItem addChargeHereItem = new JMenuItem("Add charge here");
+    	JPopupMenu notChargeMenu = new JPopupMenu();      
+        JMenuItem addChargeHereItem = new JMenuItem(sAddChargeHereItem);
         notChargeMenu.add(addChargeHereItem);
         notChargeMenu.show(this, (int) x, (int) y);
 
@@ -891,6 +903,28 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
                 addChargeHere(x, y);
             }
         });
+    }
+    
+    public void setPolishtext() {
+    	sAddChargeHereItem = "Dodaj ładunek tutaj";
+    	sCopy = "Kopiuj";
+    	sDelete = "Usuń";
+    	sEdit = "Edytuj";
+    	sCancel = "Anuluj";
+    	sChargeValueLabel = "Ustaw wartość ładunku:";
+    	sError = "Błąd";
+    	sTooMany = "Za dużo ładunków na tablicy!";
+    }
+    
+    public void setEnglishText() {
+    	sAddChargeHereItem = "Add charge here";
+    	sCopy = "Copy";
+    	sDelete = "Delete";
+    	sEdit = "Edit";
+    	sCancel = "Cancel";
+    	sChargeValueLabel = "Set charge value:";
+    	sError = "Error";
+    	sTooMany = "Too many charges on the board!";
     }
     
     //end region ChargeMenu
