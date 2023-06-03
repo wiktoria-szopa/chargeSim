@@ -698,7 +698,77 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
             repaint();
         }
     }
+    
+    //region get/set
+    public Color getEquipotentialColor() {
+        return equipotentialColor;
+    }
 
+    public void setEquipotentialColor(Color equipotentialColor) {
+        this.equipotentialColor = equipotentialColor;
+        this.repaint();
+    }
+
+    public Color getForceLineColor() {
+        return forceLineColor;
+    }
+
+    public void setForceLineColor(Color forceLineColor) {
+        this.forceLineColor = forceLineColor;
+        this.repaint();
+    }
+
+
+    public void clearChargesArray() {
+        charges.clear();
+        zeroPotTab();
+        zeroETab();
+        this.repaint();
+    }
+
+    public List<Charge> getCharges() {
+        return charges;
+    }
+
+    public void setCharges(List<Charge> chargeses) {
+    	if(charges.size() + chargeses.size() <= 10) {
+    		for(Charge ch : chargeses) {
+        		charges.add(ch);
+        	}
+    	}
+    	else {
+    		JOptionPane.showMessageDialog(this,
+                    "Too many charges on the board",
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE);
+    	}
+    	
+        //this.charges = chargeses;
+        repaint();
+    }
+
+    public boolean isEquipotenttialFlag() {
+        return equipotenttialFlag;
+    }
+
+    public void setEquipotenttialFlag(boolean equipotenttialFlag) {
+        this.equipotenttialFlag = equipotenttialFlag;
+        this.repaint();
+    }
+
+    public boolean isFieldForceFlag() {
+        return fieldForceFlag;
+    }
+
+    public void setFieldForceFlag(boolean fieldForceFlag) {
+        this.fieldForceFlag = fieldForceFlag;
+        this.repaint();
+    }
+
+
+    //enndregion get/set
+
+    //region ChargeMenu
     private void showChargeMenu(double x, double y, Charge charge) {
         double initialChargeValue = charge.getValue();
         JPopupMenu chargeMenu = new JPopupMenu();
@@ -822,64 +892,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
             }
         });
     }
-
-    ;
-
-    //region get/set
-    public Color getEquipotentialColor() {
-        return equipotentialColor;
-    }
-
-    public void setEquipotentialColor(Color equipotentialColor) {
-        this.equipotentialColor = equipotentialColor;
-        this.repaint();
-    }
-
-    public Color getForceLineColor() {
-        return forceLineColor;
-    }
-
-    public void setForceLineColor(Color forceLineColor) {
-        this.forceLineColor = forceLineColor;
-        this.repaint();
-    }
-
-
-    public void clearChargesArray() {
-        charges.clear();
-        zeroPotTab();
-        zeroETab();
-        this.repaint();
-    }
-
-    public List<Charge> getCharges() {
-        return charges;
-    }
-
-    public void setCharges(List<Charge> charges) {
-        this.charges = charges;
-        repaint();
-    }
-
-    public boolean isEquipotenttialFlag() {
-        return equipotenttialFlag;
-    }
-
-    public void setEquipotenttialFlag(boolean equipotenttialFlag) {
-        this.equipotenttialFlag = equipotenttialFlag;
-        this.repaint();
-    }
-
-    public boolean isFieldForceFlag() {
-        return fieldForceFlag;
-    }
-
-    public void setFieldForceFlag(boolean fieldForceFlag) {
-        this.fieldForceFlag = fieldForceFlag;
-        this.repaint();
-    }
-
-
-    //enndregion get/set
-
+    
+    //end region ChargeMenu
+    
+    
 }

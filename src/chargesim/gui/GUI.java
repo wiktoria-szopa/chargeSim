@@ -84,7 +84,6 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File fileIn = openFileChooser.getSelectedFile();
             try {
-
                 BufferedReader reader = new BufferedReader(new FileReader(fileIn));
                 String line = reader.readLine();
                 while (line != null) {
