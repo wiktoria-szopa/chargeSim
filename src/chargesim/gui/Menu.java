@@ -145,7 +145,7 @@ public class Menu extends JMenuBar {
         backgroundColorItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) { 
-                Color backgroundColor = JColorChooser.showDialog(null, "Pick a background color", Color.BLACK);              
+                Color backgroundColor = JColorChooser.showDialog(Menu.this, "Pick a background color", Color.BLACK);              
                 listener.backgroundColorChosen(backgroundColor);
             }
         });
@@ -163,7 +163,7 @@ public class Menu extends JMenuBar {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Color forceLineColor = JColorChooser.showDialog(null, "Pick a pick force line color", Color.BLACK);
+				Color forceLineColor = JColorChooser.showDialog(Menu.this, "Pick a pick force line color", Color.BLACK);
 				listener.forceLineColorChosen(forceLineColor);
 			}
 		});

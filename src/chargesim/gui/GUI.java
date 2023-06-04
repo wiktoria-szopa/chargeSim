@@ -265,6 +265,7 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
         UIManager.put("FileChooser.acceptAllFileFilterText", "Wszystkie pliki");
         UIManager.put("FileChooser.fileNameHeaderText", "Nazwa");
         UIManager.put("FileChooser.fileDateHeaderText", "Data modyfikacji");
+        UIManager.put("FileChooser.lookInLabelText", "Szukaj w:");   
         //UIManager.put("ColorChooser.swatchesRecent.textAndMnemonic", "Siema");
     }
     
@@ -283,7 +284,8 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
         UIManager.put("FileChooser.acceptAllFileFilterText", "All files");
         UIManager.put("FileChooser.fileNameHeaderText", "Name");
         UIManager.put("FileChooser.fileDateHeaderText", "Date Modified");
-        UIManager.put("FileChooser.fileDateHeaderText", "Date Modified");               
+        UIManager.put("FileChooser.fileDateHeaderText", "Date Modified");
+        UIManager.put("FileChooser.lookInLabelText", "Look in:");
     }
     //endregion menu listner
 
