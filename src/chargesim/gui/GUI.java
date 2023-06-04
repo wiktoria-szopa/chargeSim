@@ -239,15 +239,21 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     }
     
     public void equipotentialColorChosen(Color color) {
-        panelCenter.setEquipotentialColor(color);
+        if(color != null){
+            panelCenter.setEquipotentialColor(color);
+        };
     }
 
     public void forceLineColorChosen(Color color) {
-        panelCenter.setForceLineColor(color);
+        if(color != null){
+            panelCenter.setForceLineColor(color);
+        };
     }
 
     public void backgroundColorChosen(Color color) {
-        panelCenter.setBackground(color);
+        if(color != null){
+            panelCenter.setBackground(color);
+        }
     }
     
     public void polishItemClicked() {
