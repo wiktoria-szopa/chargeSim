@@ -12,7 +12,6 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Locale;
 
 public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
@@ -20,7 +19,7 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     static CenterPanel panelCenter = new CenterPanel();
     BottomPanel panelDown = new BottomPanel();
     Menu menuBar = new Menu();
-    
+
     //language variables
     private String sSave = "Save";
     private String sOpen = "Open";
@@ -31,7 +30,7 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     private String sFailedToOpenInvalid = "Failed to open because of invalid charge coordinates: ";
 
 
-    public GUI() {    	
+    public GUI() {
         this.setSize(800, 800);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -74,14 +73,13 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
             }
         }
     }
-    
+
     @Override
     public void onPngSaveClicked() {
         JFileChooser saveFileChooser = new JFileChooser();
         saveFileChooser.setDialogTitle(sSave);
         saveFileChooser.setApproveButtonText(sSave);
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "png", "png");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("png", "png");
         saveFileChooser.setFileFilter(filter);
         int returnVal = saveFileChooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -93,7 +91,7 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
                 ImageIO.write(image, "png", fileOut);
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this,
-                		sFailedToSave,
+                        sFailedToSave,
                         sError,
                         JOptionPane.ERROR_MESSAGE);
             }
@@ -121,7 +119,7 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
                     i++;
                     if (i < 11) {
                         Charge charge = stringToCharge(line);
-                        if(charge.getX() < 0 || charge.getX() > 783 || charge.getY() < 0 || charge.getY() > 711 ){
+                        if (charge.getX() < 0 || charge.getX() > 783 || charge.getY() < 0 || charge.getY() > 711) {
                             throw new InvalidChargeException();
                         }
                         charges.add(charge);
@@ -146,23 +144,22 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
                         sFailedToOpenTooMany + openFileChooser.getSelectedFile().getAbsolutePath(),
                         sError,
                         JOptionPane.ERROR_MESSAGE);
-            } catch (InvalidChargeException e){
+            } catch (InvalidChargeException e) {
                 JOptionPane.showMessageDialog(this,
-                		sFailedToOpenInvalid + openFileChooser.getSelectedFile().getAbsolutePath(),
+                        sFailedToOpenInvalid + openFileChooser.getSelectedFile().getAbsolutePath(),
                         sError,
                         JOptionPane.ERROR_MESSAGE);
             }
 
         }
     }
-    
+
     public void newItemChosen() {
         panelCenter.clearChargesArray();
         panelCenter.setBackground(Color.white);
         panelCenter.setEquipotentialColor(Color.black);
         panelCenter.setForceLineColor(Color.black);
     }
-
 
 
     @Override
@@ -223,7 +220,7 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
             panelCenter.repaint();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this,
-            		sFailedToOpen,
+                    sFailedToOpen,
                     sError,
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -237,27 +234,27 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     public void fieldForceShowChosen(boolean b) {
         panelCenter.setFieldForceFlag(b);
     }
-    
+
     public void equipotentialColorChosen(Color color) {
-        if(color != null){
+        if (color != null) {
             panelCenter.setEquipotentialColor(color);
-        };
+        }
     }
 
     public void forceLineColorChosen(Color color) {
-        if(color != null){
+        if (color != null) {
             panelCenter.setForceLineColor(color);
-        };
+        }
     }
 
     public void backgroundColorChosen(Color color) {
-        if(color != null){
+        if (color != null) {
             panelCenter.setBackground(color);
         }
     }
-    
+
     public void polishItemClicked() {
-    	panelCenter.setPolishtext();
+        panelCenter.setPolishtext();
         sSave = "Zapisz";
         sOpen = "Otwórz";
         sError = "Błąd";
@@ -271,11 +268,11 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
         UIManager.put("FileChooser.acceptAllFileFilterText", "Wszystkie pliki");
         UIManager.put("FileChooser.fileNameHeaderText", "Nazwa");
         UIManager.put("FileChooser.fileDateHeaderText", "Data modyfikacji");
-        UIManager.put("FileChooser.lookInLabelText", "Szukaj w:");   
+        UIManager.put("FileChooser.lookInLabelText", "Szukaj w:");
     }
-    
+
     public void englishItemClicked() {
-    	panelCenter.setEnglishText();
+        panelCenter.setEnglishText();
         sSave = "Save";
         sOpen = "Open";
         sError = "Error";

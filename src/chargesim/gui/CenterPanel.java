@@ -311,7 +311,6 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         }
     }
 
-
     //region mouse listeners
     @Override
     public void mouseMoved(MouseEvent e) {
@@ -673,7 +672,6 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     }
     //endregion ElectricFieldCalculation
     
-    
     //region add/delete charge
     public void addCharge() {
         if (charges.size() >= 10) {
@@ -919,6 +917,6 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
             }
         });
     }
-    //end region ChargeMenu    
+    //endregion ChargeMenu
    
 }
