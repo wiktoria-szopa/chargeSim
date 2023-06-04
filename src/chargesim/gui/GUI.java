@@ -17,7 +17,7 @@ import java.util.Locale;
 
 public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
 
-    CenterPanel panelCenter = new CenterPanel();
+    static CenterPanel panelCenter = new CenterPanel();
     BottomPanel panelDown = new BottomPanel();
     Menu menuBar = new Menu();
     
@@ -272,7 +272,6 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
         UIManager.put("FileChooser.fileNameHeaderText", "Nazwa");
         UIManager.put("FileChooser.fileDateHeaderText", "Data modyfikacji");
         UIManager.put("FileChooser.lookInLabelText", "Szukaj w:");   
-        //UIManager.put("ColorChooser.swatchesRecent.textAndMnemonic", "Siema");
     }
     
     public void englishItemClicked() {

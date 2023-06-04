@@ -61,6 +61,11 @@ public class Menu extends JMenuBar {
 
     //endregion fields
     
+    //language variables
+    private String sPickBackroundColor = "Pick a background color";
+    private String sPickEquiColor = "Pick a isoline color";
+    private String sPickForceLineColor = "Pick a pick force line color";
+    
     public Menu.Listener listener;
 
     public Menu() {
@@ -145,7 +150,7 @@ public class Menu extends JMenuBar {
         backgroundColorItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) { 
-                Color backgroundColor = JColorChooser.showDialog(Menu.this, "Pick a background color", Color.BLACK);              
+                Color backgroundColor = JColorChooser.showDialog(GUI.panelCenter, sPickBackroundColor, Color.BLACK);              
                 listener.backgroundColorChosen(backgroundColor);
             }
         });
@@ -154,7 +159,7 @@ public class Menu extends JMenuBar {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Color isolineColor = JColorChooser.showDialog(Menu.this, "Pick a isoline color", Color.BLACK);
+				Color isolineColor = JColorChooser.showDialog(GUI.panelCenter, sPickEquiColor, Color.BLACK);
                 listener.equipotentialColorChosen(isolineColor);
 			}
 		});
@@ -163,7 +168,7 @@ public class Menu extends JMenuBar {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Color forceLineColor = JColorChooser.showDialog(Menu.this, "Pick a pick force line color", Color.BLACK);
+				Color forceLineColor = JColorChooser.showDialog(GUI.panelCenter, sPickForceLineColor, Color.BLACK);
 				listener.forceLineColorChosen(forceLineColor);
 			}
 		});
@@ -197,8 +202,11 @@ public class Menu extends JMenuBar {
 				equipotentialColorItem.setText("Linie ekwipotencjalne");
 				fieldForceColorItem.setText("Linie sił pola");								
 				
+				sPickBackroundColor = "Wybierz kolor tła";
+				sPickEquiColor = "Wybierz kolor linii ekwipotencjalnych";
+				sPickForceLineColor = "Wybierz kolor linii sił pola";
+				
 				listener.polishItemClicked();								
-		        //UIManager.put("ColorChooser.reset.textAndMnemonic", "Siema");
 
 			}
 		});
@@ -230,6 +238,10 @@ public class Menu extends JMenuBar {
 				backgroundColorItem.setText("Background");
 				equipotentialColorItem.setText("Equipotential lines");
 				fieldForceColorItem.setText("Field force lines");
+				
+			    sPickBackroundColor = "Pick a background color";
+			    sPickEquiColor = "Pick a isoline color";
+			    sPickForceLineColor = "Pick a pick force line color";
 				
 				listener.englishItemClicked();
 			}
