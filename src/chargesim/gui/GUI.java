@@ -16,14 +16,14 @@ import java.util.Enumeration;
 import java.util.Locale;
 
 public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
-    //panele
+
     CenterPanel panelCenter = new CenterPanel();
     BottomPanel panelDown = new BottomPanel();
     Menu menuBar = new Menu();
     
+    //language variables
     private String sSave = "Save";
     private String sOpen = "Open";
-    private String sCancel = "Cancel";
     private String sError = "Error";
     private String sFailedToSave = "Failed to save into a file";
     private String sFailedToOpen = "Failed to open: ";
@@ -46,13 +46,6 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     }
 
     //region menu listener
-    public void newItemChosen() {
-        panelCenter.clearChargesArray();
-        panelCenter.setBackground(Color.white);
-        panelCenter.setEquipotentialColor(Color.black);
-        panelCenter.setForceLineColor(Color.black);
-    }
-
     @Override
     public void onSaveClicked() {
         java.util.List<Charge> charges = panelCenter.getCharges();
@@ -76,6 +69,31 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this,
                         sFailedToSave,
+                        sError,
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    @Override
+    public void onPngSaveClicked() {
+        JFileChooser saveFileChooser = new JFileChooser();
+        saveFileChooser.setDialogTitle(sSave);
+        saveFileChooser.setApproveButtonText(sSave);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "png", "png");
+        saveFileChooser.setFileFilter(filter);
+        int returnVal = saveFileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File fileOut = new File(saveFileChooser.getSelectedFile() + ".png");
+            try {
+                BufferedImage image = new BufferedImage(panelCenter.getWidth(), panelCenter.getHeight(), BufferedImage.TYPE_INT_RGB);
+                Graphics2D canvas = image.createGraphics();
+                panelCenter.paintAll(canvas);
+                ImageIO.write(image, "png", fileOut);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this,
+                		sFailedToSave,
                         sError,
                         JOptionPane.ERROR_MESSAGE);
             }
@@ -137,18 +155,15 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
 
         }
     }
-
-    public void equipotentialColorChosen(Color color) {
-        panelCenter.setEquipotentialColor(color);
+    
+    public void newItemChosen() {
+        panelCenter.clearChargesArray();
+        panelCenter.setBackground(Color.white);
+        panelCenter.setEquipotentialColor(Color.black);
+        panelCenter.setForceLineColor(Color.black);
     }
 
-    public void forceLineColorChosen(Color color) {
-        panelCenter.setForceLineColor(color);
-    }
 
-    public void backgroundColorChosen(Color color) {
-        panelCenter.setBackground(color);
-    }
 
     @Override
     public void addChargeClicked() {
@@ -222,31 +237,17 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
     public void fieldForceShowChosen(boolean b) {
         panelCenter.setFieldForceFlag(b);
     }
+    
+    public void equipotentialColorChosen(Color color) {
+        panelCenter.setEquipotentialColor(color);
+    }
 
-    @Override
-    public void onPngSaveClicked() {
-        JFileChooser saveFileChooser = new JFileChooser();
-        saveFileChooser.setDialogTitle(sSave);
-        saveFileChooser.setApproveButtonText(sSave);
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "png", "png");
-        saveFileChooser.setFileFilter(filter);
-        int returnVal = saveFileChooser.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File fileOut = new File(saveFileChooser.getSelectedFile() + ".png");
-            try {
-                BufferedImage image = new BufferedImage(panelCenter.getWidth(), panelCenter.getHeight(), BufferedImage.TYPE_INT_RGB);
-                Graphics2D canvas = image.createGraphics();
-                panelCenter.paintAll(canvas);
-                ImageIO.write(image, "png", fileOut);
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(this,
-                		sFailedToSave,
-                        sError,
-                        JOptionPane.ERROR_MESSAGE);
-            }
+    public void forceLineColorChosen(Color color) {
+        panelCenter.setForceLineColor(color);
+    }
 
-        }
+    public void backgroundColorChosen(Color color) {
+        panelCenter.setBackground(color);
     }
     
     public void polishItemClicked() {
@@ -264,13 +265,13 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
         UIManager.put("FileChooser.acceptAllFileFilterText", "Wszystkie pliki");
         UIManager.put("FileChooser.fileNameHeaderText", "Nazwa");
         UIManager.put("FileChooser.fileDateHeaderText", "Data modyfikacji");
+        //UIManager.put("ColorChooser.swatchesRecent.textAndMnemonic", "Siema");
     }
     
     public void englishItemClicked() {
     	panelCenter.setEnglishText();
         sSave = "Save";
         sOpen = "Open";
-        sCancel = "Cancel";
         sError = "Error";
         sFailedToSave = "Failed to save into a file";
         sFailedToOpen = "Failed to open: ";
@@ -282,6 +283,7 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
         UIManager.put("FileChooser.acceptAllFileFilterText", "All files");
         UIManager.put("FileChooser.fileNameHeaderText", "Name");
         UIManager.put("FileChooser.fileDateHeaderText", "Date Modified");
+        UIManager.put("FileChooser.fileDateHeaderText", "Date Modified");               
     }
     //endregion menu listner
 
@@ -311,6 +313,7 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
 
     //endregion centerpanel listener
 
+    //region save/open functions
     private String chargeToString(Charge charge) {
         return String.format(Locale.US, "%f\t%f\t%f", charge.getX(), charge.getY(), charge.getValue());
     }
@@ -323,5 +326,5 @@ public class GUI extends JFrame implements Menu.Listener, CenterPanel.Listener {
 
         return new Charge(x, y, q);
     }
-
+    //endregion save/open functions
 }

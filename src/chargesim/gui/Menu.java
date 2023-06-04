@@ -10,11 +10,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Menu extends JMenuBar {
-	
-	Locale loc = new Locale("en", "EN");
-	ResourceBundle rB = ResourceBundle.getBundle("chargesim.gui.Bundle", loc);
-	
-
+		
     public interface Listener {   
         void backgroundColorChosen(Color color);
         void forceLineColorChosen(Color color);
@@ -33,50 +29,38 @@ public class Menu extends JMenuBar {
     }
 
     //region fields
-    //menu glowne
+    //main menu
     JMenu menu = new JMenu("Menu");
-
-    //przyciski w menu glownym
     JMenu saveMenu = new JMenu("Save");
     JMenuItem saveAsPngItem = new JMenuItem("as png");
     JMenuItem saveItem = new JMenuItem("as charge sim file");
     JMenuItem openItem = new JMenuItem("Open");
     JMenuItem newItem = new JMenuItem("New");
 
-    //menu dodaj
+    //menu add
     JMenu menuAdd = new JMenu("Add");
-
-    //przyciski w menu dodaj
     JMenuItem chargeItem = new JMenuItem("Charge");
     JMenuItem dipoleItem = new JMenuItem("Dipole");
     JMenuItem quadrupoleItem = new JMenuItem("Quadrupole");
 
     //menu language
     JMenu menuLanguage = new JMenu("Language");
-
-    //przyciski w menu language
     JMenuItem polishItem = new JMenuItem("Polish");
     JMenuItem englishItem = new JMenuItem("English");
     
     //menu show
     JMenu menuShow = new JMenu("View");
-    
-    //przyciski w menu show
     JCheckBoxMenuItem equiShowItem = new JCheckBoxMenuItem("Equipotential lines");
     JCheckBoxMenuItem forceLineShowItem = new JCheckBoxMenuItem("Field force lines");
 
     //menu color
     JMenu menuColor = new JMenu("Colors");
-
-    //przyciski menu color
     JMenuItem backgroundColorItem = new JMenuItem("Background");
-
     JMenuItem equipotentialColorItem = new JMenuItem("Equipotential  lines");
-
     JMenuItem fieldForceColorItem = new JMenuItem("Field force lines");
 
     //endregion fields
-
+    
     public Menu.Listener listener;
 
     public Menu() {
@@ -100,6 +84,44 @@ public class Menu extends JMenuBar {
         menuShow.add(equiShowItem);
         menuShow.add(forceLineShowItem);
         
+        add(menuColor);
+        menuColor.add(backgroundColorItem);
+        menuColor.add(equipotentialColorItem);
+        menuColor.add(fieldForceColorItem);
+
+        add(menuLanguage);
+        menuLanguage.add(polishItem);
+        menuLanguage.add(englishItem);
+        
+        //main menu actionlisteners
+        saveItem.addActionListener(e -> listener.onSaveClicked());
+        
+        saveAsPngItem.addActionListener(e -> listener.onPngSaveClicked());
+
+        openItem.addActionListener(e -> listener.onOpenClicked());
+        
+        newItem.addActionListener(e -> listener.newItemChosen());
+        
+        //menu add actionlisteners
+        chargeItem.addActionListener(e -> listener.addChargeClicked());
+        
+        dipoleItem.addActionListener(e-> {
+            try {
+                listener.addDipoleClicked();
+            } catch (URISyntaxException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        quadrupoleItem.addActionListener(e-> {
+            try {
+                listener.addQuadrupoleClicked();
+            } catch (URISyntaxException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+               
+        //menu show actionlisteners
         equiShowItem.addActionListener(new ActionListener() {
 			
 			@Override
@@ -118,16 +140,13 @@ public class Menu extends JMenuBar {
 			}
 		});
 
-        add(menuColor);
-        menuColor.add(backgroundColorItem);
-        menuColor.add(equipotentialColorItem);
-        menuColor.add(fieldForceColorItem);
 
+        //menu colors actionlisteners
         backgroundColorItem.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                Color backgorundColor = JColorChooser.showDialog(null, "Pick a background color", Color.BLACK);
-                listener.backgroundColorChosen(backgorundColor);
+            public void actionPerformed(ActionEvent e) { 
+                Color backgroundColor = JColorChooser.showDialog(null, "Pick a background color", Color.BLACK);              
+                listener.backgroundColorChosen(backgroundColor);
             }
         });
 
@@ -135,7 +154,7 @@ public class Menu extends JMenuBar {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Color isolineColor = JColorChooser.showDialog(null, "Pick a isoline color", Color.BLACK);
+				Color isolineColor = JColorChooser.showDialog(Menu.this, "Pick a isoline color", Color.BLACK);
                 listener.equipotentialColorChosen(isolineColor);
 			}
 		});
@@ -148,12 +167,8 @@ public class Menu extends JMenuBar {
 				listener.forceLineColorChosen(forceLineColor);
 			}
 		});
-        
-        add(menuLanguage);
-        menuLanguage.add(polishItem);
-        menuLanguage.add(englishItem);
-        
-      
+                  
+        //menu language listeners
         polishItem.addActionListener(new ActionListener() {
 			
 			@Override
@@ -180,9 +195,11 @@ public class Menu extends JMenuBar {
 				menuColor.setText("Kolory");
 				backgroundColorItem.setText("Tło");
 				equipotentialColorItem.setText("Linie ekwipotencjalne");
-				fieldForceColorItem.setText("Linie sił pola");
+				fieldForceColorItem.setText("Linie sił pola");								
 				
-				listener.polishItemClicked();
+				listener.polishItemClicked();								
+		        //UIManager.put("ColorChooser.reset.textAndMnemonic", "Siema");
+
 			}
 		});
         
@@ -217,34 +234,5 @@ public class Menu extends JMenuBar {
 				listener.englishItemClicked();
 			}
 		});
-        
-        
-        chargeItem.addActionListener(e -> listener.addChargeClicked());
-        
-        newItem.addActionListener(e -> listener.newItemChosen());
-
-        saveItem.addActionListener(e -> listener.onSaveClicked());
-
-        openItem.addActionListener(e -> listener.onOpenClicked());
-
-        dipoleItem.addActionListener(e-> {
-            try {
-                listener.addDipoleClicked();
-            } catch (URISyntaxException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-        quadrupoleItem.addActionListener(e-> {
-            try {
-                listener.addQuadrupoleClicked();
-            } catch (URISyntaxException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-        saveAsPngItem.addActionListener(e -> listener.onPngSaveClicked());
-
-
     }
 }

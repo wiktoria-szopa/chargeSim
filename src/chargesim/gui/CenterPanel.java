@@ -16,14 +16,17 @@ import java.util.List;
 
 public class CenterPanel extends JPanel implements MouseListener, MouseMotionListener {
 
+	//global variables
     private static final int CHARGE_RADIUS = 30;
     private static final double k = 8.9875;
     private double x;
     private double y;
 
+    //move charge variables
     int nextChargeId = 1;
     Charge movingCharge = null;
 
+    //calc/draw equipotential variables
     private int rez = 2;
     private int dJump = 2;
     private int xJump = 1;
@@ -34,7 +37,10 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     private double maxPot = 0;
     private int iRez;
     private int jRez;
-
+    private boolean equipotentialFlag = true;
+    private Color equipotentialColor = Color.black;
+    
+    //calc/draw field force variables
     private int rezE = 21;
     private int widthETab = (int) Math.ceil(800 / 21);
     private double[][] ExTab = new double[widthETab][widthETab];
@@ -42,17 +48,15 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     private double maxEx = 0;
     private double maxEy = 0;
     private int iRezE;
-    private int jRezE;
-
-    private boolean equipotenttialFlag = true;
+    private int jRezE;    
     private boolean fieldForceFlag = true;
+    private Color forceLineColor = Color.black;
 
+    //charge images
     private BufferedImage positiveImage;
     private BufferedImage negativeImage;
 
-    private Color equipotentialColor = Color.black;
-    private Color forceLineColor = Color.black;
-    
+    //language variables
     private String sEdit = "Edit";
     private String sCopy = "Copy";
     private String sDelete = "Delete";
@@ -62,21 +66,16 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
     private String sError = "Error";
     private String sTooMany = "Too many charges on the board!";
 
+    private java.util.List<Charge> charges = new ArrayList<Charge>();
+    
     public interface Listener {
         void cursorMoved(double x, double y);
-
         void potentialChange(double v);
-
         void EChange(double ex, double ey);
-
         void setPotential();
-
         void setE();
     }
-
     Listener listener;
-
-    private java.util.List<Charge> charges = new ArrayList<Charge>();
 
     public CenterPanel() {
         super();
@@ -99,7 +98,8 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        if (equipotenttialFlag) {
+        //drawing equipotential lines
+        if (equipotentialFlag) {
             g2d.setColor(equipotentialColor);
             int state = 0;
             g2d.setStroke(new BasicStroke(2));
@@ -156,6 +156,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
             g2d.setColor(Color.black);
         }
 
+        //drawing field force lines
         if (fieldForceFlag) {
             int stateE;
             g2d.setStroke(new BasicStroke(3));
@@ -164,7 +165,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
                     for (int j = 0; j < widthETab; j++) {
                         iRezE = i * rezE;
                         jRezE = j * rezE;
-                        stateE = getEState(ExTab[i][j], EyTab[i][j], maxEx, maxEy);
+                        stateE = getEState(ExTab[i][j], EyTab[i][j]);
                         g2d.setColor(calcColor(ExTab[i][j], EyTab[i][j]));
                         switch (stateE) {
                             case 0:
@@ -288,7 +289,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
             g2d.setColor(Color.black);
         }
 
-
+        //drawing charges
         for (Charge charge : charges) {
             if (charge.getValue() < 0) {
                 g2d.drawImage(
@@ -384,7 +385,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         }
         x = e.getX();
         y = e.getY();
-        if (x > 20 && x < 763 && y > 20 && y < 691) {
+        if (x > 20 && x < 777 && y > 20 && y < 702) {
             movingCharge.setX(x);
             movingCharge.setY(y);
             x = x / 100;
@@ -431,7 +432,6 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         }
         return tmp_jump;
     }
-
     //endregion MarchingSquares
 
     //region PotentialCalculation
@@ -582,7 +582,7 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         }
     }
 
-    int getEState(double a, double b, double c, double d) {
+    int getEState(double a, double b) {
         double il = 0;
         double maxIl = 1;
         if (a == 0 && b != 0) {
@@ -671,10 +671,10 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         }
         return tmp_color;
     }
-
-
     //endregion ElectricFieldCalculation
-
+    
+    
+    //region add/delete charge
     public void addCharge() {
         if (charges.size() >= 10) {
             JOptionPane.showMessageDialog(this,
@@ -708,6 +708,26 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         }
     }
     
+    public List<Charge> getCharges() {
+        return charges;
+    }
+
+    public void setCharges(List<Charge> chargeses) {
+    	if(charges.size() + chargeses.size() <= 10) {
+    		for(Charge ch : chargeses) {
+        		charges.add(ch);
+        	}
+    	}
+    	else {
+    		JOptionPane.showMessageDialog(this,
+    				sTooMany,
+                    sError,
+                    JOptionPane.ERROR_MESSAGE);
+    	}
+        repaint();
+    }
+  //endregion add/delete charge
+    
     //region get/set
     public Color getEquipotentialColor() {
         return equipotentialColor;
@@ -727,7 +747,6 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         this.repaint();
     }
 
-
     public void clearChargesArray() {
         charges.clear();
         zeroPotTab();
@@ -735,33 +754,12 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         this.repaint();
     }
 
-    public List<Charge> getCharges() {
-        return charges;
-    }
-
-    public void setCharges(List<Charge> chargeses) {
-    	if(charges.size() + chargeses.size() <= 10) {
-    		for(Charge ch : chargeses) {
-        		charges.add(ch);
-        	}
-    	}
-    	else {
-    		JOptionPane.showMessageDialog(this,
-    				sTooMany,
-                    sError,
-                    JOptionPane.ERROR_MESSAGE);
-    	}
-    	
-        //this.charges = chargeses;
-        repaint();
-    }
-
     public boolean isEquipotenttialFlag() {
-        return equipotenttialFlag;
+        return equipotentialFlag;
     }
 
     public void setEquipotenttialFlag(boolean equipotenttialFlag) {
-        this.equipotenttialFlag = equipotenttialFlag;
+        this.equipotentialFlag = equipotenttialFlag;
         this.repaint();
     }
 
@@ -773,14 +771,31 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
         this.fieldForceFlag = fieldForceFlag;
         this.repaint();
     }
-
-
-    //enndregion get/set
-
-    //region ChargeMenu
-
-    //JLabel chargeValueLabel = new JLabel("Set charge value:");
     
+    public void setPolishtext() {
+    	sAddChargeHereItem = "Dodaj ładunek tutaj";
+    	sCopy = "Kopiuj";
+    	sDelete = "Usuń";
+    	sEdit = "Edytuj";
+    	sCancel = "Anuluj";
+    	sChargeValueLabel = "Ustaw wartość ładunku:";
+    	sError = "Błąd";
+    	sTooMany = "Za dużo ładunków na tablicy!";
+    }
+    
+    public void setEnglishText() {
+    	sAddChargeHereItem = "Add charge here";
+    	sCopy = "Copy";
+    	sDelete = "Delete";
+    	sEdit = "Edit";
+    	sCancel = "Cancel";
+    	sChargeValueLabel = "Set charge value:";
+    	sError = "Error";
+    	sTooMany = "Too many charges on the board!";
+    }
+    //endregion get/set
+
+    //region ChargeMenu   
     private void showChargeMenu(double x, double y, Charge charge) {
         double initialChargeValue = charge.getValue();
         JPopupMenu chargeMenu = new JPopupMenu();
@@ -904,30 +919,6 @@ public class CenterPanel extends JPanel implements MouseListener, MouseMotionLis
             }
         });
     }
-    
-    public void setPolishtext() {
-    	sAddChargeHereItem = "Dodaj ładunek tutaj";
-    	sCopy = "Kopiuj";
-    	sDelete = "Usuń";
-    	sEdit = "Edytuj";
-    	sCancel = "Anuluj";
-    	sChargeValueLabel = "Ustaw wartość ładunku:";
-    	sError = "Błąd";
-    	sTooMany = "Za dużo ładunków na tablicy!";
-    }
-    
-    public void setEnglishText() {
-    	sAddChargeHereItem = "Add charge here";
-    	sCopy = "Copy";
-    	sDelete = "Delete";
-    	sEdit = "Edit";
-    	sCancel = "Cancel";
-    	sChargeValueLabel = "Set charge value:";
-    	sError = "Error";
-    	sTooMany = "Too many charges on the board!";
-    }
-    
-    //end region ChargeMenu
-    
-    
+    //end region ChargeMenu    
+   
 }
