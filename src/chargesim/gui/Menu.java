@@ -10,31 +10,18 @@ public class Menu extends JMenuBar {
 
     public interface Listener {
         void backgroundColorChosen(Color color);
-
         void forceLineColorChosen(Color color);
-
         void equipotentialColorChosen(Color color);
-
         void addChargeClicked();
-
         void addDipoleClicked() throws URISyntaxException;
-
         void addQuadrupoleClicked() throws URISyntaxException;
-
         void newItemChosen();
-
         void onSaveClicked();
-
         void onOpenClicked();
-
         void equiShowChosen(boolean b);
-
         void fieldForceShowChosen(boolean b);
-
         void onPngSaveClicked();
-
         void polishItemClicked();
-
         void englishItemClicked();
     }
 
@@ -137,24 +124,9 @@ public class Menu extends JMenuBar {
         });
 
         //menu show actionlisteners
-        equiShowItem.addActionListener(new ActionListener() {
+        equiShowItem.addActionListener(e -> listener.equiShowChosen(equiShowItem.getState()));
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                listener.equiShowChosen(equiShowItem.getState());
-
-            }
-        });
-
-        forceLineShowItem.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                listener.fieldForceShowChosen(forceLineShowItem.getState());
-
-            }
-        });
-
+        forceLineShowItem.addActionListener(e -> listener.fieldForceShowChosen(forceLineShowItem.getState()));
 
         //menu colors actionlisteners
         backgroundColorItem.addActionListener(new ActionListener() {

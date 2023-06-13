@@ -14,7 +14,6 @@ public class BottomPanel extends JPanel {
     JLabel potentialField = new JLabel("V: ");
     JLabel EField = new JLabel("E: ");
 
-
     public BottomPanel() {
         super();
         add(xField);
