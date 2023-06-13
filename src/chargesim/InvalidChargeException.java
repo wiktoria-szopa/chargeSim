@@ -1,4 +1,4 @@
-package chargesim.gui;
+package chargesim;
 
 public class InvalidChargeException extends RuntimeException{
 }

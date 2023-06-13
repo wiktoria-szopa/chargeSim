@@ -1,4 +1,4 @@
-package chargesim.gui;
+package chargesim;
 
 import javax.swing.*;
 

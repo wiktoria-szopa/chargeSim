@@ -1,7 +1,5 @@
-package chargesim.gui;
+package chargesim;
 
-
-import chargesim.Charge;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
